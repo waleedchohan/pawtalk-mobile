@@ -525,38 +525,11 @@ function Home({navigation}) {
     <Box flex={1} bg="#F9FAFB">
       <Header />
 
-      {/* Tab Bar */}
-      <HStack bg="white" shadow={1}>
-        <TouchableOpacity
-          style={[styles.tabButton, selectedTab === 'home' && styles.activeTabButton]}
-          onPress={() => setSelectedTab('home')}>
-          <Text
-            fontSize="md"
-            fontFamily={selectedTab === 'home' ? 'heading' : 'body'}
-            color={selectedTab === 'home' ? 'gray.800' : 'gray.500'}>
-            Home
-          </Text>
-          {selectedTab === 'home' && <Box style={styles.tabIndicator} />}
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={[styles.tabButton, selectedTab === 'forYou' && styles.activeTabButton]}
-          onPress={() => setSelectedTab('forYou')}>
-          <Text
-            fontSize="md"
-            fontFamily={selectedTab === 'forYou' ? 'heading' : 'body'}
-            color={selectedTab === 'forYou' ? 'gray.800' : 'gray.500'}>
-            For You
-          </Text>
-          {selectedTab === 'forYou' && <Box style={styles.tabIndicator} />}
-        </TouchableOpacity>
-      </HStack>
-
       <ScrollView
         showsVerticalScrollIndicator={false}
         contentContainerStyle={{paddingBottom: 30}}>
         {/* Enhanced Stories Section */}
-        {selectedTab === 'home' && (
-          <Box bg="white" mb={2} py={3} shadow={1}>
+        <Box bg="white" mb={2} py={3} shadow={1}>
           <ScrollView
             horizontal
             showsHorizontalScrollIndicator={false}
@@ -570,7 +543,32 @@ function Home({navigation}) {
             </HStack>
           </ScrollView>
         </Box>
-        )}
+
+        {/* Tab Bar */}
+        <HStack bg="white" shadow={1} mb={2}>
+          <TouchableOpacity
+            style={[styles.tabButton, selectedTab === 'home' && styles.activeTabButton]}
+            onPress={() => setSelectedTab('home')}>
+            <Text
+              fontSize="md"
+              fontFamily={selectedTab === 'home' ? 'heading' : 'body'}
+              color={selectedTab === 'home' ? 'gray.800' : 'gray.500'}>
+              Home
+            </Text>
+            {selectedTab === 'home' && <Box style={styles.tabIndicator} />}
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={[styles.tabButton, selectedTab === 'forYou' && styles.activeTabButton]}
+            onPress={() => setSelectedTab('forYou')}>
+            <Text
+              fontSize="md"
+              fontFamily={selectedTab === 'forYou' ? 'heading' : 'body'}
+              color={selectedTab === 'forYou' ? 'gray.800' : 'gray.500'}>
+              For You
+            </Text>
+            {selectedTab === 'forYou' && <Box style={styles.tabIndicator} />}
+          </TouchableOpacity>
+        </HStack>
 
         {/* Posts Feed */}
         <Box px={3} pt={2}>
