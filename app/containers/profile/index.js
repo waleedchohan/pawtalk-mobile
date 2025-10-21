@@ -109,23 +109,18 @@ function Profile({navigation}) {
     }, 2000);
   }, []);
 
-  const StatCard = ({icon, iconColor, label, value}) => (
-    <VStack alignItems="center" space={2} flex={1}>
-      <Box bg={`${iconColor}10`} p={2.5} borderRadius={12}>
-        <MaterialCommunityIcons name={icon} size={22} color={iconColor} />
-      </Box>
-      <VStack alignItems="center" space={0.5}>
-        <Text fontSize="xl" fontFamily="heading" color="gray.800">
-          {value}
-        </Text>
-        <Text
-          fontSize="xs"
-          color="gray.500"
-          fontWeight="500"
-          letterSpacing={0.3}>
-          {label}
-        </Text>
-      </VStack>
+  const StatCard = ({label, value}) => (
+    <VStack alignItems="center" space={0.5} flex={1}>
+      <Text fontSize="xl" fontFamily="heading" color="gray.800">
+        {value}
+      </Text>
+      <Text
+        fontSize="xs"
+        color="gray.500"
+        fontWeight="500"
+        letterSpacing={0.3}>
+        {label}
+      </Text>
     </VStack>
   );
 
@@ -314,52 +309,13 @@ function Profile({navigation}) {
           </VStack>
 
           {/* User Stats */}
-          <HStack space={3} mt={6} mb={4} px={4}>
-            <Box
-              flex={1}
-              bg="white"
-              borderRadius={16}
-              py={4}
-              shadow={2}
-              borderWidth={1}
-              borderColor="gray.100">
-              <StatCard
-                icon="image-multiple"
-                iconColor="#8B5CF6"
-                label="Posts"
-                value={userData.posts}
-              />
-            </Box>
-            <Box
-              flex={1}
-              bg="white"
-              borderRadius={16}
-              py={4}
-              shadow={2}
-              borderWidth={1}
-              borderColor="gray.100">
-              <StatCard
-                icon="account-heart"
-                iconColor="#6FE5A9"
-                label="Followers"
-                value={userData.followers.toLocaleString()}
-              />
-            </Box>
-            <Box
-              flex={1}
-              bg="white"
-              borderRadius={16}
-              py={4}
-              shadow={2}
-              borderWidth={1}
-              borderColor="gray.100">
-              <StatCard
-                icon="account-multiple-plus"
-                iconColor="#FF6B6B"
-                label="Following"
-                value={userData.following}
-              />
-            </Box>
+          <HStack mt={6} mb={4} px={8} justifyContent="space-around">
+            <StatCard label="Posts" value={userData.posts} />
+            <StatCard
+              label="Followers"
+              value={userData.followers.toLocaleString()}
+            />
+            <StatCard label="Following" value={userData.following} />
           </HStack>
 
           {/* Action Buttons */}
