@@ -109,14 +109,23 @@ function Profile({navigation}) {
     }, 2000);
   }, []);
 
-  const StatCard = ({label, value}) => (
-    <VStack alignItems="center" space={1.5} flex={1}>
-      <Text fontSize="2xl" fontFamily="heading" color="gray.800">
-        {value}
-      </Text>
-      <Text fontSize="xs" color="gray.500" fontWeight="500" letterSpacing={0.5}>
-        {label}
-      </Text>
+  const StatCard = ({icon, iconColor, label, value}) => (
+    <VStack alignItems="center" space={2} flex={1}>
+      <Box bg={`${iconColor}10`} p={2.5} borderRadius={12}>
+        <MaterialCommunityIcons name={icon} size={22} color={iconColor} />
+      </Box>
+      <VStack alignItems="center" space={0.5}>
+        <Text fontSize="xl" fontFamily="heading" color="gray.800">
+          {value}
+        </Text>
+        <Text
+          fontSize="xs"
+          color="gray.500"
+          fontWeight="500"
+          letterSpacing={0.3}>
+          {label}
+        </Text>
+      </VStack>
     </VStack>
   );
 
@@ -288,7 +297,7 @@ function Profile({navigation}) {
 
           {/* User Info */}
           <VStack alignItems="center" mt={4} space={1}>
-            <Text fontSize="2xl" fontFamily="heading" color="gray.800">
+            <Text fontSize="lg" fontFamily="heading" color="gray.800">
               {userData.name}
             </Text>
             <Text fontSize="sm" color="gray.500" fontWeight="500">
@@ -305,32 +314,53 @@ function Profile({navigation}) {
           </VStack>
 
           {/* User Stats */}
-          <Box
-            mt={6}
-            mb={4}
-            mx={4}
-            bg="#F9FAFB"
-            borderRadius={16}
-            overflow="hidden"
-            borderWidth={1}
-            borderColor="gray.200">
-            <HStack>
-              <Box flex={1} py={4} alignItems="center">
-                <StatCard label="Posts" value={userData.posts} />
-              </Box>
-              <Divider orientation="vertical" bg="gray.300" thickness={1} />
-              <Box flex={1} py={4} alignItems="center">
-                <StatCard
-                  label="Followers"
-                  value={userData.followers.toLocaleString()}
-                />
-              </Box>
-              <Divider orientation="vertical" bg="gray.300" thickness={1} />
-              <Box flex={1} py={4} alignItems="center">
-                <StatCard label="Following" value={userData.following} />
-              </Box>
-            </HStack>
-          </Box>
+          <HStack space={3} mt={6} mb={4} px={4}>
+            <Box
+              flex={1}
+              bg="white"
+              borderRadius={16}
+              py={4}
+              shadow={2}
+              borderWidth={1}
+              borderColor="gray.100">
+              <StatCard
+                icon="image-multiple"
+                iconColor="#8B5CF6"
+                label="Posts"
+                value={userData.posts}
+              />
+            </Box>
+            <Box
+              flex={1}
+              bg="white"
+              borderRadius={16}
+              py={4}
+              shadow={2}
+              borderWidth={1}
+              borderColor="gray.100">
+              <StatCard
+                icon="account-heart"
+                iconColor="#6FE5A9"
+                label="Followers"
+                value={userData.followers.toLocaleString()}
+              />
+            </Box>
+            <Box
+              flex={1}
+              bg="white"
+              borderRadius={16}
+              py={4}
+              shadow={2}
+              borderWidth={1}
+              borderColor="gray.100">
+              <StatCard
+                icon="account-multiple-plus"
+                iconColor="#FF6B6B"
+                label="Following"
+                value={userData.following}
+              />
+            </Box>
+          </HStack>
 
           {/* Action Buttons */}
           <HStack space={3} px={4} mt={2}>
@@ -410,7 +440,10 @@ function Profile({navigation}) {
                       color={Colors.primary}
                     />
                   </Box>
-                  <Text fontSize="md" fontFamily="heading" color={Colors.primary}>
+                  <Text
+                    fontSize="md"
+                    fontFamily="heading"
+                    color={Colors.primary}>
                     Add New Pet
                   </Text>
                   <Text fontSize="xs" color="gray.500" mt={1}>
