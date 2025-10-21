@@ -109,15 +109,12 @@ function Profile({navigation}) {
     }, 2000);
   }, []);
 
-  const StatCard = ({icon, label, value, color}) => (
-    <VStack alignItems="center" space={1} flex={1}>
-      <Box bg={`${color}15`} p={3} borderRadius="full">
-        <MaterialCommunityIcons name={icon} size={24} color={color} />
-      </Box>
-      <Text fontSize="xl" fontWeight="bold" color="gray.800">
+  const StatCard = ({label, value}) => (
+    <VStack alignItems="center" space={1.5} flex={1}>
+      <Text fontSize="2xl" fontFamily="heading" color="gray.800">
         {value}
       </Text>
-      <Text fontSize="xs" color="gray.500" fontWeight="500">
+      <Text fontSize="xs" color="gray.500" fontWeight="500" letterSpacing={0.5}>
         {label}
       </Text>
     </VStack>
@@ -156,7 +153,7 @@ function Profile({navigation}) {
               py={3}>
               <HStack alignItems="center" justifyContent="space-between">
                 <VStack>
-                  <Text fontSize="2xl" fontWeight="bold" color="white">
+                  <Text fontSize="2xl" fontFamily="heading" color="white">
                     {pet.name}
                   </Text>
                   <HStack alignItems="center" space={2}>
@@ -189,7 +186,7 @@ function Profile({navigation}) {
             borderBottomWidth={1}
             borderBottomColor="gray.100">
             <VStack alignItems="center" flex={1}>
-              <Text fontSize="lg" fontWeight="bold" color="gray.800">
+              <Text fontSize="lg" fontFamily="heading" color="gray.800">
                 {pet.stats.posts}
               </Text>
               <Text fontSize="xs" color="gray.500" mt={0.5}>
@@ -198,7 +195,7 @@ function Profile({navigation}) {
             </VStack>
             <Divider orientation="vertical" bg="gray.300" />
             <VStack alignItems="center" flex={1}>
-              <Text fontSize="lg" fontWeight="bold" color="gray.800">
+              <Text fontSize="lg" fontFamily="heading" color="gray.800">
                 {pet.stats.followers}
               </Text>
               <Text fontSize="xs" color="gray.500" mt={0.5}>
@@ -213,7 +210,7 @@ function Profile({navigation}) {
                   size={16}
                   color={Colors.orange}
                 />
-                <Text fontSize="lg" fontWeight="bold" color="gray.800">
+                <Text fontSize="lg" fontFamily="heading" color="gray.800">
                   {pet.stats.treats}
                 </Text>
               </HStack>
@@ -291,7 +288,7 @@ function Profile({navigation}) {
 
           {/* User Info */}
           <VStack alignItems="center" mt={4} space={1}>
-            <Text fontSize="2xl" fontWeight="bold" color="gray.800">
+            <Text fontSize="2xl" fontFamily="heading" color="gray.800">
               {userData.name}
             </Text>
             <Text fontSize="sm" color="gray.500" fontWeight="500">
@@ -308,31 +305,37 @@ function Profile({navigation}) {
           </VStack>
 
           {/* User Stats */}
-          <HStack mt={6} mb={4} px={4} justifyContent="space-around">
-            <StatCard
-              icon="post-outline"
-              label="Posts"
-              value={userData.posts}
-              color={Colors.purple}
-            />
-            <StatCard
-              icon="account-group"
-              label="Followers"
-              value={userData.followers.toLocaleString()}
-              color={Colors.primary}
-            />
-            <StatCard
-              icon="account-multiple-outline"
-              label="Following"
-              value={userData.following}
-              color={Colors.orange}
-            />
-          </HStack>
+          <Box
+            mt={6}
+            mb={4}
+            mx={4}
+            bg="#F9FAFB"
+            borderRadius={16}
+            overflow="hidden"
+            borderWidth={1}
+            borderColor="gray.200">
+            <HStack>
+              <Box flex={1} py={4} alignItems="center">
+                <StatCard label="Posts" value={userData.posts} />
+              </Box>
+              <Divider orientation="vertical" bg="gray.300" thickness={1} />
+              <Box flex={1} py={4} alignItems="center">
+                <StatCard
+                  label="Followers"
+                  value={userData.followers.toLocaleString()}
+                />
+              </Box>
+              <Divider orientation="vertical" bg="gray.300" thickness={1} />
+              <Box flex={1} py={4} alignItems="center">
+                <StatCard label="Following" value={userData.following} />
+              </Box>
+            </HStack>
+          </Box>
 
           {/* Action Buttons */}
           <HStack space={3} px={4} mt={2}>
             <TouchableOpacity style={styles.editButton}>
-              <Text fontSize="sm" fontWeight="600" color="white">
+              <Text fontSize="sm" fontFamily="heading" color="white">
                 Edit Profile
               </Text>
             </TouchableOpacity>
@@ -345,10 +348,7 @@ function Profile({navigation}) {
         {/* Tabs */}
         <HStack bg="white" mt={2} px={5} pt={3} shadow={1}>
           <TouchableOpacity
-            style={[
-              styles.tab,
-              selectedTab === 'pets' && styles.activeTab,
-            ]}
+            style={[styles.tab, selectedTab === 'pets' && styles.activeTab]}
             onPress={() => setSelectedTab('pets')}>
             <HStack alignItems="center" space={2}>
               <MaterialCommunityIcons
@@ -358,7 +358,7 @@ function Profile({navigation}) {
               />
               <Text
                 fontSize="sm"
-                fontWeight="600"
+                fontFamily="heading"
                 color={selectedTab === 'pets' ? Colors.primary : '#9CA3AF'}>
                 My Pets ({userPets.length})
               </Text>
@@ -366,10 +366,7 @@ function Profile({navigation}) {
           </TouchableOpacity>
 
           <TouchableOpacity
-            style={[
-              styles.tab,
-              selectedTab === 'posts' && styles.activeTab,
-            ]}
+            style={[styles.tab, selectedTab === 'posts' && styles.activeTab]}
             onPress={() => setSelectedTab('posts')}>
             <HStack alignItems="center" space={2}>
               <MaterialCommunityIcons
@@ -379,7 +376,7 @@ function Profile({navigation}) {
               />
               <Text
                 fontSize="sm"
-                fontWeight="600"
+                fontFamily="heading"
                 color={selectedTab === 'posts' ? Colors.primary : '#9CA3AF'}>
                 Posts
               </Text>
@@ -413,7 +410,7 @@ function Profile({navigation}) {
                       color={Colors.primary}
                     />
                   </Box>
-                  <Text fontSize="md" fontWeight="600" color={Colors.primary}>
+                  <Text fontSize="md" fontFamily="heading" color={Colors.primary}>
                     Add New Pet
                   </Text>
                   <Text fontSize="xs" color="gray.500" mt={1}>
@@ -438,7 +435,7 @@ function Profile({navigation}) {
                   color={Colors.primary}
                 />
               </Box>
-              <Text fontSize="lg" fontWeight="600" color="gray.700">
+              <Text fontSize="lg" fontFamily="heading" color="gray.700">
                 No posts yet
               </Text>
               <Text fontSize="sm" color="gray.500" mt={2} textAlign="center">
@@ -489,4 +486,3 @@ const styles = StyleSheet.create({
 });
 
 export default Profile;
-
