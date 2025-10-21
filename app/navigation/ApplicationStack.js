@@ -6,6 +6,7 @@ import Home from '../containers/home';
 import Discover from '../containers/discover';
 import Post from '../containers/post';
 import Translate from '../containers/translate';
+import Profile from '../containers/profile';
 import {TouchableOpacity, Dimensions, StyleSheet, Platform} from 'react-native';
 import Colors from '../themes/Colors';
 
@@ -181,7 +182,7 @@ const ApplicationStack = () => {
       <Tab.Screen name="Discover" component={Discover} />
       <Tab.Screen name="Post" component={Post} />
       <Tab.Screen name="Translate" component={Translate} />
-      <Tab.Screen name="Profile" component={Home} />
+      <Tab.Screen name="Profile" component={Profile} />
     </Tab.Navigator>
   );
 };
