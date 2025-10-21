@@ -141,6 +141,7 @@ const samplePosts = [
 function Home({navigation}) {
   const [posts, setPosts] = useState(samplePosts);
   const [activeImageIndex, setActiveImageIndex] = useState({});
+  const [selectedTab, setSelectedTab] = useState('home'); // 'home' or 'forYou'
 
   const handleLike = postId => {
     setPosts(
@@ -524,11 +525,38 @@ function Home({navigation}) {
     <Box flex={1} bg="#F9FAFB">
       <Header />
 
+      {/* Tab Bar */}
+      <HStack bg="white" shadow={1}>
+        <TouchableOpacity
+          style={[styles.tabButton, selectedTab === 'home' && styles.activeTabButton]}
+          onPress={() => setSelectedTab('home')}>
+          <Text
+            fontSize="md"
+            fontFamily={selectedTab === 'home' ? 'heading' : 'body'}
+            color={selectedTab === 'home' ? 'gray.800' : 'gray.500'}>
+            Home
+          </Text>
+          {selectedTab === 'home' && <Box style={styles.tabIndicator} />}
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={[styles.tabButton, selectedTab === 'forYou' && styles.activeTabButton]}
+          onPress={() => setSelectedTab('forYou')}>
+          <Text
+            fontSize="md"
+            fontFamily={selectedTab === 'forYou' ? 'heading' : 'body'}
+            color={selectedTab === 'forYou' ? 'gray.800' : 'gray.500'}>
+            For You
+          </Text>
+          {selectedTab === 'forYou' && <Box style={styles.tabIndicator} />}
+        </TouchableOpacity>
+      </HStack>
+
       <ScrollView
         showsVerticalScrollIndicator={false}
         contentContainerStyle={{paddingBottom: 30}}>
         {/* Enhanced Stories Section */}
-        <Box bg="white" mb={2} py={3} shadow={1}>
+        {selectedTab === 'home' && (
+          <Box bg="white" mb={2} py={3} shadow={1}>
           <ScrollView
             horizontal
             showsHorizontalScrollIndicator={false}
@@ -542,12 +570,20 @@ function Home({navigation}) {
             </HStack>
           </ScrollView>
         </Box>
+        )}
 
         {/* Posts Feed */}
         <Box px={3} pt={2}>
-          {posts.map(post => (
-            <PostCard key={post.id} post={post} />
-          ))}
+          {selectedTab === 'home' ? (
+            posts.map(post => (
+              <PostCard key={post.id} post={post} />
+            ))
+          ) : (
+            // For You feed
+            posts.slice().reverse().map(post => (
+              <PostCard key={post.id} post={post} />
+            ))
+          )}
         </Box>
 
         {/* End of Feed */}
@@ -570,6 +606,26 @@ function Home({navigation}) {
 }
 
 const styles = StyleSheet.create({
+  tabButton: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingVertical: 16,
+    position: 'relative',
+  },
+  activeTabButton: {
+    // active styles handled by indicator
+  },
+  tabIndicator: {
+    position: 'absolute',
+    bottom: 0,
+    left: 0,
+    right: 0,
+    height: 3,
+    backgroundColor: '#6FE5A9',
+    borderTopLeftRadius: 3,
+    borderTopRightRadius: 3,
+  },
   storyContainer: {
     alignItems: 'center',
     width: 80,
