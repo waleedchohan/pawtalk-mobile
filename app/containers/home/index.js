@@ -13,7 +13,15 @@ import {
   Badge,
   Icon,
 } from 'native-base';
-import {Dimensions, TouchableOpacity, StyleSheet} from 'react-native';
+import {
+  Dimensions,
+  TouchableOpacity,
+  StyleSheet,
+  Modal,
+  Platform,
+  TextInput as RNTextInput,
+} from 'react-native';
+import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import Header from '../../components/header/Header';
@@ -138,10 +146,76 @@ const samplePosts = [
   },
 ];
 
+// Sample comments data
+const sampleComments = {
+  1: [
+    {
+      id: 1,
+      userName: 'Jessica Miller',
+      userAvatar:
+        'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=100',
+      comment: 'Aww, Buddy is so adorable! 🥰',
+      timeAgo: '1h ago',
+      likes: 12,
+    },
+    {
+      id: 2,
+      userName: 'Tom Anderson',
+      userAvatar:
+        'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100',
+      comment: 'What a beautiful trail! Where is this? 🌲',
+      timeAgo: '45m ago',
+      likes: 5,
+    },
+    {
+      id: 3,
+      userName: 'Emily Davis',
+      userAvatar:
+        'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=100',
+      comment: 'Golden Retrievers are the best! Give him a pat from me 🐾',
+      timeAgo: '30m ago',
+      likes: 8,
+    },
+  ],
+  2: [
+    {
+      id: 4,
+      userName: 'David Lee',
+      userAvatar:
+        'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=100',
+      comment: 'That face! 😍',
+      timeAgo: '2h ago',
+      likes: 15,
+    },
+    {
+      id: 5,
+      userName: 'Lisa Wong',
+      userAvatar:
+        'https://images.unsplash.com/photo-1487412720507-e7ab37603c6f?w=100',
+      comment: 'Cats really know how to find the best nap spots!',
+      timeAgo: '1h ago',
+      likes: 6,
+    },
+  ],
+  3: [
+    {
+      id: 6,
+      userName: 'Mark Johnson',
+      userAvatar:
+        'https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=100',
+      comment: 'Impressive! How long did it take to train him?',
+      timeAgo: '3h ago',
+      likes: 20,
+    },
+  ],
+};
+
 function Home({navigation}) {
   const [posts, setPosts] = useState(samplePosts);
-  const [activeImageIndex, setActiveImageIndex] = useState({});
-  const [selectedTab, setSelectedTab] = useState('home'); // 'home' or 'forYou'
+  const [selectedTab, setSelectedTab] = useState('following'); // 'following' or 'forYou'
+  const [showCommentsModal, setShowCommentsModal] = useState(false);
+  const [selectedPost, setSelectedPost] = useState(null);
+  const [commentText, setCommentText] = useState('');
 
   const handleLike = postId => {
     setPosts(
@@ -255,11 +329,13 @@ function Home({navigation}) {
     );
   };
 
+  const openCommentsModal = post => {
+    setSelectedPost(post);
+    setShowCommentsModal(true);
+  };
+
   // Enhanced Post Card Component
   const PostCard = ({post}) => {
-    const [currentImageIndex, setCurrentImageIndex] = useState(0);
-    const hasMultipleImages = post.images.length > 1;
-
     return (
       <Box bg="white" borderRadius={16} shadow={3} mb={5} overflow="hidden">
         {/* Header */}
@@ -341,101 +417,68 @@ function Home({navigation}) {
           </TouchableOpacity>
         </HStack>
 
-        {/* Image Carousel */}
-        <Box position="relative">
-          <ScrollView
-            horizontal
-            pagingEnabled
-            showsHorizontalScrollIndicator={false}
-            onMomentumScrollEnd={event => {
-              const index = Math.round(
-                event.nativeEvent.contentOffset.x / screenWidth,
-              );
-              setCurrentImageIndex(index);
-            }}>
-            {post.images.map((img, index) => (
-              <Box
-                key={index}
-                width={screenWidth}
-                height={screenWidth}
-                bg="gray.100">
-                <Image
-                  source={{uri: img}}
-                  alt={`${post.petName} photo ${index + 1}`}
-                  width="100%"
-                  height="100%"
-                  resizeMode="cover"
-                />
-              </Box>
-            ))}
-          </ScrollView>
-
-          {/* Image Counter */}
-          {hasMultipleImages && (
-            <Box
-              position="absolute"
-              top={3}
-              right={3}
-              bg="rgba(0,0,0,0.6)"
-              px={3}
-              py={1}
-              borderRadius="full">
-              <Text fontSize="xs" color="white" fontWeight="semibold">
-                {currentImageIndex + 1}/{post.images.length}
-              </Text>
-            </Box>
-          )}
-
-          {/* Image Dots Indicator */}
-          {hasMultipleImages && (
-            <HStack
-              position="absolute"
-              bottom={3}
-              left={0}
-              right={0}
-              justifyContent="center"
-              space={1.5}>
-              {post.images.map((_, index) => (
-                <Box
-                  key={index}
-                  width={currentImageIndex === index ? 6 : 1.5}
-                  height={1.5}
-                  borderRadius="full"
-                  bg={
-                    currentImageIndex === index
-                      ? 'white'
-                      : 'rgba(255,255,255,0.5)'
-                  }
-                />
-              ))}
-            </HStack>
-          )}
+        {/* Single Image */}
+        <Box width="100%" height={screenWidth} bg="gray.100">
+          <Image
+            source={{uri: post.images[0]}}
+            alt={`${post.petName} photo`}
+            width="100%"
+            height="100%"
+            resizeMode="cover"
+          />
         </Box>
 
         {/* Actions */}
         <Box px={4} pt={3} pb={2}>
-          <HStack justifyContent="space-between" alignItems="center" mb={3}>
-            <HStack space={4}>
+          <HStack justifyContent="space-between" alignItems="center" mb={2}>
+            <HStack space={5} alignItems="center">
               <TouchableOpacity
                 onPress={() => handleLike(post.id)}
                 style={styles.actionButton}>
-                <MaterialCommunityIcons
-                  name={post.isLiked ? 'heart' : 'heart-outline'}
-                  size={28}
-                  color={post.isLiked ? '#EF4444' : '#374151'}
-                />
+                <HStack alignItems="center" space={1}>
+                  <MaterialCommunityIcons
+                    name={post.isLiked ? 'heart' : 'heart-outline'}
+                    size={26}
+                    color={post.isLiked ? '#EF4444' : '#374151'}
+                  />
+                  <Text
+                    fontSize="sm"
+                    fontWeight="semibold"
+                    color={post.isLiked ? '#EF4444' : 'gray.600'}>
+                    {post.likes}
+                  </Text>
+                </HStack>
               </TouchableOpacity>
-              <TouchableOpacity style={styles.actionButton}>
-                <Ionicons name="chatbubble-outline" size={26} color="#374151" />
+
+              <TouchableOpacity
+                onPress={() => openCommentsModal(post)}
+                style={styles.actionButton}>
+                <HStack alignItems="center" space={1}>
+                  <Ionicons
+                    name="chatbubble-outline"
+                    size={24}
+                    color="#374151"
+                  />
+                  <Text fontSize="sm" fontWeight="semibold" color="gray.600">
+                    {post.comments}
+                  </Text>
+                </HStack>
               </TouchableOpacity>
+
               <TouchableOpacity style={styles.actionButton}>
-                <Ionicons
-                  name="paper-plane-outline"
-                  size={26}
-                  color="#374151"
-                />
+                <HStack alignItems="center" space={1}>
+                  <Ionicons
+                    name="paper-plane-outline"
+                    size={24}
+                    color="#374151"
+                  />
+                  <Text fontSize="sm" fontWeight="semibold" color="gray.600">
+                    {post.shares}
+                  </Text>
+                </HStack>
               </TouchableOpacity>
             </HStack>
+
             <TouchableOpacity
               onPress={() => handleSave(post.id)}
               style={styles.actionButton}>
@@ -447,75 +490,13 @@ function Home({navigation}) {
             </TouchableOpacity>
           </HStack>
 
-          {/* Engagement Stats */}
-          <HStack alignItems="center" space={3} mb={2}>
-            <HStack alignItems="center" space={1}>
-              <Box
-                bg="red.50"
-                borderRadius="full"
-                p={1}
-                borderWidth={1.5}
-                borderColor="red.400">
-                <MaterialCommunityIcons
-                  name="heart"
-                  size={12}
-                  color="#EF4444"
-                />
-              </Box>
-              <Text
-                fontFamily="heading"
-                fontSize="sm"
-                color="gray.800"
-                fontWeight="bold">
-                {post.likes.toLocaleString()}
-              </Text>
-            </HStack>
-            <HStack alignItems="center" space={1}>
-              <Ionicons name="chatbubble" size={14} color="#6FE5A9" />
-              <Text fontSize="sm" color="gray.600" fontWeight="semibold">
-                {post.comments}
-              </Text>
-            </HStack>
-            <HStack alignItems="center" space={1}>
-              <Ionicons name="paper-plane" size={14} color="#10B981" />
-              <Text fontSize="sm" color="gray.600" fontWeight="semibold">
-                {post.shares}
-              </Text>
-            </HStack>
-          </HStack>
-
           {/* Caption */}
-          <VStack space={1} mb={2}>
+          <VStack space={1} mt={1}>
             <Text fontSize="sm" color="gray.800">
               <Text fontWeight="bold">{post.petName}</Text>{' '}
               <Text color="gray.700">{post.caption}</Text>
             </Text>
           </VStack>
-
-          {/* Comments Preview */}
-          {post.comments > 0 && (
-            <TouchableOpacity mb={2}>
-              <Text fontSize="sm" color="gray.500">
-                View all {post.comments} comments
-              </Text>
-            </TouchableOpacity>
-          )}
-
-          {/* Add Comment */}
-          <HStack
-            alignItems="center"
-            space={2}
-            pt={2}
-            borderTopWidth={1}
-            borderTopColor="gray.100">
-            <Avatar size="sm" bg="#E8FAF3" source={{uri: post.avatar}}>
-              <Text fontSize="xs">🐾</Text>
-            </Avatar>
-            <Text fontSize="sm" color="gray.400" flex={1}>
-              Add a comment...
-            </Text>
-            <Ionicons name="happy-outline" size={20} color="#9CA3AF" />
-          </HStack>
         </Box>
       </Box>
     );
@@ -547,18 +528,24 @@ function Home({navigation}) {
         {/* Tab Bar */}
         <HStack bg="white" shadow={1} mb={2}>
           <TouchableOpacity
-            style={[styles.tabButton, selectedTab === 'home' && styles.activeTabButton]}
-            onPress={() => setSelectedTab('home')}>
+            style={[
+              styles.tabButton,
+              selectedTab === 'following' && styles.activeTabButton,
+            ]}
+            onPress={() => setSelectedTab('following')}>
             <Text
               fontSize="md"
-              fontFamily={selectedTab === 'home' ? 'heading' : 'body'}
-              color={selectedTab === 'home' ? 'gray.800' : 'gray.500'}>
-              Home
+              fontFamily={selectedTab === 'following' ? 'heading' : 'body'}
+              color={selectedTab === 'following' ? 'gray.800' : 'gray.500'}>
+              Following
             </Text>
-            {selectedTab === 'home' && <Box style={styles.tabIndicator} />}
+            {selectedTab === 'following' && <Box style={styles.tabIndicator} />}
           </TouchableOpacity>
           <TouchableOpacity
-            style={[styles.tabButton, selectedTab === 'forYou' && styles.activeTabButton]}
+            style={[
+              styles.tabButton,
+              selectedTab === 'forYou' && styles.activeTabButton,
+            ]}
             onPress={() => setSelectedTab('forYou')}>
             <Text
               fontSize="md"
@@ -572,16 +559,13 @@ function Home({navigation}) {
 
         {/* Posts Feed */}
         <Box px={3} pt={2}>
-          {selectedTab === 'home' ? (
-            posts.map(post => (
-              <PostCard key={post.id} post={post} />
-            ))
-          ) : (
-            // For You feed
-            posts.slice().reverse().map(post => (
-              <PostCard key={post.id} post={post} />
-            ))
-          )}
+          {selectedTab === 'following'
+            ? posts.map(post => <PostCard key={post.id} post={post} />)
+            : // For You feed
+              posts
+                .slice()
+                .reverse()
+                .map(post => <PostCard key={post.id} post={post} />)}
         </Box>
 
         {/* End of Feed */}
@@ -599,6 +583,206 @@ function Home({navigation}) {
           </VStack>
         </Center>
       </ScrollView>
+
+      {/* Instagram-Style Comments Modal */}
+      <Modal
+        visible={showCommentsModal}
+        transparent={true}
+        animationType="slide"
+        onRequestClose={() => setShowCommentsModal(false)}>
+        <Box
+          flex={1}
+          bg="rgba(0,0,0,0.5)"
+          justifyContent="flex-end"
+          onTouchEnd={() => setShowCommentsModal(false)}>
+          <Box
+            bg="white"
+            borderTopLeftRadius={20}
+            borderTopRightRadius={20}
+            maxH="90%"
+            onTouchEnd={e => e.stopPropagation()}>
+            {/* Modal Header */}
+            <HStack
+              alignItems="center"
+              justifyContent="space-between"
+              p={4}
+              borderBottomWidth={1}
+              borderBottomColor="gray.200">
+              <Text fontSize="lg" fontWeight="bold" color="gray.800">
+                Comments
+              </Text>
+              <TouchableOpacity onPress={() => setShowCommentsModal(false)}>
+                <Ionicons name="close" size={28} color="#374151" />
+              </TouchableOpacity>
+            </HStack>
+
+            {/* Comments List */}
+            <KeyboardAwareScrollView
+              showsVerticalScrollIndicator={false}
+              enableOnAndroid={true}
+              enableAutomaticScroll={true}
+              extraScrollHeight={20}
+              keyboardShouldPersistTaps="handled"
+              contentContainerStyle={{padding: 16}}
+              style={{maxHeight: screenWidth * 1.5}}>
+              {selectedPost && (
+                <VStack space={4}>
+                  {/* Post Preview */}
+                  <HStack
+                    space={3}
+                    pb={4}
+                    borderBottomWidth={1}
+                    borderBottomColor="gray.100">
+                    <Avatar
+                      size="md"
+                      source={{uri: selectedPost.avatar}}
+                      bg="#E8FAF3"
+                    />
+                    <VStack flex={1}>
+                      <HStack alignItems="center" space={2}>
+                        <Text fontSize="md" fontWeight="bold" color="gray.800">
+                          {selectedPost.petName}
+                        </Text>
+                        <Badge
+                          bg="#E8FAF3"
+                          borderRadius="full"
+                          px={2}
+                          py={0.5}
+                          _text={{
+                            fontSize: '2xs',
+                            color: '#2D9D78',
+                            fontWeight: 'semibold',
+                          }}>
+                          {selectedPost.petType}
+                        </Badge>
+                      </HStack>
+                      <Text fontSize="sm" color="gray.600" numberOfLines={2}>
+                        {selectedPost.caption}
+                      </Text>
+                    </VStack>
+                  </HStack>
+
+                  {/* Comments */}
+                  {(sampleComments[selectedPost.id] || []).map(comment => (
+                    <HStack key={comment.id} space={3} alignItems="flex-start">
+                      <Avatar
+                        size="sm"
+                        source={{uri: comment.userAvatar}}
+                        bg="gray.200"
+                      />
+                      <VStack flex={1} space={1}>
+                        <HStack
+                          alignItems="center"
+                          justifyContent="space-between">
+                          <Text
+                            fontSize="sm"
+                            fontWeight="bold"
+                            color="gray.800">
+                            {comment.userName}
+                          </Text>
+                          <Text fontSize="xs" color="gray.400">
+                            {comment.timeAgo}
+                          </Text>
+                        </HStack>
+                        <Text fontSize="sm" color="gray.700">
+                          {comment.comment}
+                        </Text>
+                        <HStack alignItems="center" space={4} mt={1}>
+                          <TouchableOpacity>
+                            <HStack alignItems="center" space={1}>
+                              <Ionicons
+                                name="heart-outline"
+                                size={16}
+                                color="#9CA3AF"
+                              />
+                              <Text
+                                fontSize="xs"
+                                color="gray.500"
+                                fontWeight="medium">
+                                {comment.likes}
+                              </Text>
+                            </HStack>
+                          </TouchableOpacity>
+                          <TouchableOpacity>
+                            <Text
+                              fontSize="xs"
+                              color="gray.500"
+                              fontWeight="semibold">
+                              Reply
+                            </Text>
+                          </TouchableOpacity>
+                        </HStack>
+                      </VStack>
+                    </HStack>
+                  ))}
+
+                  {(sampleComments[selectedPost.id] || []).length === 0 && (
+                    <Center py={8}>
+                      <MaterialCommunityIcons
+                        name="comment-outline"
+                        size={48}
+                        color="#D1D5DB"
+                      />
+                      <Text fontSize="md" color="gray.500" mt={2}>
+                        No comments yet
+                      </Text>
+                      <Text fontSize="sm" color="gray.400" mt={1}>
+                        Be the first to comment!
+                      </Text>
+                    </Center>
+                  )}
+                </VStack>
+              )}
+            </KeyboardAwareScrollView>
+
+            {/* Comment Input */}
+            <HStack
+              alignItems="center"
+              space={2}
+              px={3}
+              py={2}
+              borderTopWidth={1}
+              borderTopColor="gray.200"
+              bg="white">
+              <Avatar size="sm" bg="#E8FAF3">
+                <Text fontSize="xs">🐾</Text>
+              </Avatar>
+              <Box flex={1} shadow={0}>
+                <RNTextInput
+                  placeholder="Add a comment..."
+                  placeholderTextColor="#9CA3AF"
+                  value={commentText}
+                  onChangeText={setCommentText}
+                  style={{
+                    fontSize: 14,
+                    borderRadius: 20,
+                    backgroundColor: '#F9FAFB',
+                    borderWidth: 1,
+                    borderColor: '#E5E7EB',
+                    paddingVertical: 8,
+                    paddingHorizontal: 16,
+                  }}
+                  multiline
+                />
+              </Box>
+              <TouchableOpacity
+                disabled={!commentText.trim()}
+                onPress={() => {
+                  // TODO: Handle comment submission
+                  console.log('Comment:', commentText);
+                  setCommentText('');
+                }}>
+                <Text
+                  fontSize="sm"
+                  fontWeight="bold"
+                  color={commentText.trim() ? '#6FE5A9' : '#D1D5DB'}>
+                  Post
+                </Text>
+              </TouchableOpacity>
+            </HStack>
+          </Box>
+        </Box>
+      </Modal>
     </Box>
   );
 }
