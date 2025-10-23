@@ -5,6 +5,7 @@ import AuthStack from './AuthStack';
 import ApplicationStack from './ApplicationStack';
 import Notifications from '../containers/notifications';
 import Messages from '../containers/messages';
+import PetProfile from '../containers/petProfile';
 
 const RootStack = createNativeStackNavigator();
 const MainStack = createNativeStackNavigator();
@@ -28,6 +29,14 @@ function MainNavigator() {
       <MainStack.Screen
         name="Messages"
         component={Messages}
+        options={{
+          presentation: 'card',
+          animation: 'slide_from_right',
+        }}
+      />
+      <MainStack.Screen
+        name="PetProfile"
+        component={PetProfile}
         options={{
           presentation: 'card',
           animation: 'slide_from_right',
