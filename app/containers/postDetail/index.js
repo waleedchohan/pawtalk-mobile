@@ -1,7 +1,6 @@
-import React, {useState, useRef, useEffect} from 'react';
+import React, {useState} from 'react';
 import {
   Box,
-  ScrollView,
   Text,
   VStack,
   HStack,
@@ -14,6 +13,7 @@ import {
   Dimensions,
   TextInput as RNTextInput,
   Modal,
+  FlatList,
   Platform,
 } from 'react-native';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
@@ -56,9 +56,6 @@ function PostDetail({navigation, route}) {
   const allPosts = route?.params?.allPosts || [initialPost];
   const initialIndex = route?.params?.initialIndex || 0;
   
-  const scrollViewRef = useRef(null);
-  const postRefs = useRef({});
-  
   const [posts, setPosts] = useState(
     allPosts.map(p => ({
       ...p,
@@ -69,22 +66,6 @@ function PostDetail({navigation, route}) {
   const [showCommentsModal, setShowCommentsModal] = useState(false);
   const [selectedPost, setSelectedPost] = useState(null);
   const [commentText, setCommentText] = useState('');
-
-  // Scroll to initial post after render
-  useEffect(() => {
-    if (initialIndex > 0) {
-      // Each post is approximately: header (80) + image (screenWidth) + actions (200) + margin (2)
-      const estimatedPostHeight = screenWidth + 282;
-      const scrollOffset = initialIndex * estimatedPostHeight;
-      
-      setTimeout(() => {
-        scrollViewRef.current?.scrollTo({
-          y: scrollOffset,
-          animated: false,
-        });
-      }, 100);
-    }
-  }, [initialIndex]);
 
   const handleLike = postId => {
     setPosts(
@@ -111,13 +92,8 @@ function PostDetail({navigation, route}) {
     setShowCommentsModal(true);
   };
 
-  const PostItem = ({post, index}) => (
-    <Box
-      bg="white"
-      mb={0.5}
-      ref={ref => {
-        if (ref) postRefs.current[index] = ref;
-      }}>
+  const PostItem = ({post}) => (
+    <Box bg="white" mb={0.5}>
       {/* Post Header */}
       <HStack p={4} alignItems="center" justifyContent="space-between">
         <TouchableOpacity
@@ -248,14 +224,22 @@ function PostDetail({navigation, route}) {
       </Box>
 
       {/* Posts Feed - One per row, vertically scrollable */}
-      <ScrollView
-        ref={scrollViewRef}
+      <FlatList
+        data={posts}
+        renderItem={({item}) => <PostItem post={item} />}
+        keyExtractor={item => item.id.toString()}
+        initialScrollIndex={initialIndex}
+        getItemLayout={(data, index) => ({
+          length: screenWidth + 300,
+          offset: (screenWidth + 300) * index,
+          index,
+        })}
         showsVerticalScrollIndicator={false}
-        contentContainerStyle={{paddingBottom: 20}}>
-        {posts.map((post, index) => (
-          <PostItem key={post.id} post={post} index={index} />
-        ))}
-      </ScrollView>
+        contentContainerStyle={{paddingBottom: 20}}
+        removeClippedSubviews={true}
+        maxToRenderPerBatch={3}
+        windowSize={5}
+      />
 
       {/* Comments Modal */}
       <Modal

@@ -48,7 +48,8 @@ function MainNavigator() {
         component={PostDetail}
         options={{
           presentation: 'card',
-          animation: 'slide_from_bottom',
+          animation: 'fade_from_bottom',
+          animationDuration: 200,
         }}
       />
     </MainStack.Navigator>
