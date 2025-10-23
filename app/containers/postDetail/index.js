@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useRef, useEffect} from 'react';
 import {
   Box,
   ScrollView,
@@ -54,6 +54,10 @@ const sampleComments = [
 function PostDetail({navigation, route}) {
   const initialPost = route?.params?.post || {};
   const allPosts = route?.params?.allPosts || [initialPost];
+  const initialIndex = route?.params?.initialIndex || 0;
+  
+  const scrollViewRef = useRef(null);
+  const postRefs = useRef({});
   
   const [posts, setPosts] = useState(
     allPosts.map(p => ({
@@ -65,6 +69,22 @@ function PostDetail({navigation, route}) {
   const [showCommentsModal, setShowCommentsModal] = useState(false);
   const [selectedPost, setSelectedPost] = useState(null);
   const [commentText, setCommentText] = useState('');
+
+  // Scroll to initial post after render
+  useEffect(() => {
+    if (initialIndex > 0) {
+      // Each post is approximately: header (80) + image (screenWidth) + actions (200) + margin (2)
+      const estimatedPostHeight = screenWidth + 282;
+      const scrollOffset = initialIndex * estimatedPostHeight;
+      
+      setTimeout(() => {
+        scrollViewRef.current?.scrollTo({
+          y: scrollOffset,
+          animated: false,
+        });
+      }, 100);
+    }
+  }, [initialIndex]);
 
   const handleLike = postId => {
     setPosts(
@@ -82,9 +102,7 @@ function PostDetail({navigation, route}) {
 
   const handleSave = postId => {
     setPosts(
-      posts.map(p =>
-        p.id === postId ? {...p, isSaved: !p.isSaved} : p,
-      ),
+      posts.map(p => (p.id === postId ? {...p, isSaved: !p.isSaved} : p)),
     );
   };
 
@@ -93,8 +111,13 @@ function PostDetail({navigation, route}) {
     setShowCommentsModal(true);
   };
 
-  const PostItem = ({post}) => (
-    <Box bg="white" mb={0.5}>
+  const PostItem = ({post, index}) => (
+    <Box
+      bg="white"
+      mb={0.5}
+      ref={ref => {
+        if (ref) postRefs.current[index] = ref;
+      }}>
       {/* Post Header */}
       <HStack p={4} alignItems="center" justifyContent="space-between">
         <TouchableOpacity
@@ -158,11 +181,7 @@ function PostDetail({navigation, route}) {
               <Ionicons name="chatbubble-outline" size={26} color="#374151" />
             </TouchableOpacity>
             <TouchableOpacity>
-              <Ionicons
-                name="paper-plane-outline"
-                size={26}
-                color="#374151"
-              />
+              <Ionicons name="paper-plane-outline" size={26} color="#374151" />
             </TouchableOpacity>
           </HStack>
           <TouchableOpacity onPress={() => handleSave(post.id)}>
@@ -230,10 +249,11 @@ function PostDetail({navigation, route}) {
 
       {/* Posts Feed - One per row, vertically scrollable */}
       <ScrollView
+        ref={scrollViewRef}
         showsVerticalScrollIndicator={false}
         contentContainerStyle={{paddingBottom: 20}}>
-        {posts.map(post => (
-          <PostItem key={post.id} post={post} />
+        {posts.map((post, index) => (
+          <PostItem key={post.id} post={post} index={index} />
         ))}
       </ScrollView>
 
@@ -281,10 +301,7 @@ function PostDetail({navigation, route}) {
               {selectedPost && (
                 <VStack space={4}>
                   {sampleComments.map(comment => (
-                    <HStack
-                      key={comment.id}
-                      space={3}
-                      alignItems="flex-start">
+                    <HStack key={comment.id} space={3} alignItems="flex-start">
                       <Avatar
                         size="sm"
                         source={{uri: comment.userAvatar}}
@@ -408,4 +425,3 @@ const styles = StyleSheet.create({
 });
 
 export default PostDetail;
-
