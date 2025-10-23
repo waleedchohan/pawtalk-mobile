@@ -163,7 +163,11 @@ function PetProfile({navigation, route}) {
       onPress={() =>
         navigation.navigate('PostDetail', {
           post: {...profileData, ...post, image: post.image},
-          allPosts: samplePosts.map(p => ({...profileData, ...p, image: p.image})),
+          allPosts: samplePosts.map(p => ({
+            ...profileData,
+            ...p,
+            image: p.image,
+          })),
           initialIndex: index,
         })
       }>

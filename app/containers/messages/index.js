@@ -235,7 +235,7 @@ function Messages({navigation}) {
             <TouchableOpacity onPress={() => navigation.goBack()}>
               <Ionicons name="arrow-back" size={24} color="#374151" />
             </TouchableOpacity>
-            <Text fontSize="2xl" fontFamily="heading" color="gray.800">
+            <Text fontSize="lg" fontFamily="heading" color="gray.800">
               Messages {unreadCount > 0 && `(${unreadCount})`}
             </Text>
           </HStack>

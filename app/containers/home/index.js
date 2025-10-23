@@ -28,20 +28,30 @@ import Header from '../../components/header/Header';
 
 const screenWidth = Dimensions.get('window').width;
 
-// Sample stories data
-const sampleStories = [
-  {
-    id: 0,
-    isAddStory: true,
-    petName: 'Your Story',
-    avatar: 'https://images.unsplash.com/photo-1552053831-71594a27632d?w=100',
-  },
+// Sample stories data with full story content
+const storiesWithContent = [
   {
     id: 1,
     petName: 'Buddy',
     petType: 'Golden Retriever',
     avatar: 'https://images.unsplash.com/photo-1552053831-71594a27632d?w=100',
     hasNewStory: true,
+    stories: [
+      {
+        id: 1,
+        image:
+          'https://images.unsplash.com/photo-1552053831-71594a27632d?w=800',
+        duration: 5000,
+        timestamp: '2h ago',
+      },
+      {
+        id: 2,
+        image:
+          'https://images.unsplash.com/photo-1601758228041-f3b2795255f1?w=800',
+        duration: 5000,
+        timestamp: '1h ago',
+      },
+    ],
   },
   {
     id: 2,
@@ -50,6 +60,15 @@ const sampleStories = [
     avatar:
       'https://images.unsplash.com/photo-1574158622682-e40e69881006?w=100',
     hasNewStory: true,
+    stories: [
+      {
+        id: 3,
+        image:
+          'https://images.unsplash.com/photo-1574158622682-e40e69881006?w=800',
+        duration: 5000,
+        timestamp: '3h ago',
+      },
+    ],
   },
   {
     id: 3,
@@ -58,6 +77,22 @@ const sampleStories = [
     avatar:
       'https://images.unsplash.com/photo-1583337130417-3346a1be7dee?w=100',
     hasNewStory: true,
+    stories: [
+      {
+        id: 4,
+        image:
+          'https://images.unsplash.com/photo-1583337130417-3346a1be7dee?w=800',
+        duration: 5000,
+        timestamp: '4h ago',
+      },
+      {
+        id: 5,
+        image:
+          'https://images.unsplash.com/photo-1587300003388-59208cc962cb?w=800',
+        duration: 5000,
+        timestamp: '5h ago',
+      },
+    ],
   },
   {
     id: 4,
@@ -66,6 +101,7 @@ const sampleStories = [
     avatar:
       'https://images.unsplash.com/photo-1513360371669-4adf3dd7dff8?w=100',
     hasNewStory: false,
+    stories: [],
   },
   {
     id: 5,
@@ -74,7 +110,27 @@ const sampleStories = [
     avatar:
       'https://images.unsplash.com/photo-1568572933382-74d440642117?w=100',
     hasNewStory: true,
+    stories: [
+      {
+        id: 6,
+        image:
+          'https://images.unsplash.com/photo-1568572933382-74d440642117?w=800',
+        duration: 5000,
+        timestamp: '6h ago',
+      },
+    ],
   },
+];
+
+// Add "Add Story" at the beginning
+const sampleStories = [
+  {
+    id: 0,
+    isAddStory: true,
+    petName: 'Your Story',
+    avatar: 'https://images.unsplash.com/photo-1552053831-71594a27632d?w=100',
+  },
+  ...storiesWithContent,
 ];
 
 // Sample pet posts data
@@ -84,6 +140,7 @@ const samplePosts = [
     petName: 'Buddy',
     petType: 'Golden Retriever',
     ownerName: 'Sarah Johnson',
+    username: '@buddythegolden',
     location: 'Central Park, NY',
     avatar: 'https://images.unsplash.com/photo-1552053831-71594a27632d?w=100',
     images: [
@@ -92,19 +149,27 @@ const samplePosts = [
     ],
     caption:
       "Buddy loves his morning walks! 🌞 Today we discovered a new trail and he was so excited! Can't wait to explore more. #GoldenRetriever #DogLife #MorningWalks",
+    bio: '🐕 Golden Retriever living my best life\n📍 New York, NY\n🎾 Ball enthusiast',
     likes: 342,
     comments: 28,
     shares: 13,
     timeAgo: '2h ago',
     isLiked: false,
     isSaved: false,
+    isVerified: true,
     tags: ['#GoldenRetriever', '#DogLife', '#MorningWalks'],
+    stats: {
+      posts: 156,
+      followers: 2847,
+      following: 892,
+    },
   },
   {
     id: 2,
     petName: 'Whiskers',
     petType: 'Persian Cat',
     ownerName: 'Mike Chen',
+    username: '@whiskersthecat',
     location: 'Home Sweet Home',
     avatar:
       'https://images.unsplash.com/photo-1574158622682-e40e69881006?w=100',
@@ -113,19 +178,27 @@ const samplePosts = [
     ],
     caption:
       'Nap time is the best time! 😴 Whiskers found the perfect sunny spot for his afternoon nap. Look at that peaceful face! 💤 #CatNap #PersianCat #Blessed',
+    bio: '😺 Persian Cat | Professional Napper\n📍 Cozy Home | ☀️ Sunbeam Hunter',
     likes: 567,
     comments: 42,
     shares: 25,
     timeAgo: '4h ago',
     isLiked: true,
     isSaved: true,
+    isVerified: true,
     tags: ['#CatNap', '#PersianCat', '#Blessed'],
+    stats: {
+      posts: 234,
+      followers: 1523,
+      following: 456,
+    },
   },
   {
     id: 3,
     petName: 'Charlie',
     petType: 'Border Collie',
     ownerName: 'Emma Davis',
+    username: '@charliethecollie',
     location: 'Sunny Beach, CA',
     avatar:
       'https://images.unsplash.com/photo-1583337130417-3346a1be7dee?w=100',
@@ -136,13 +209,20 @@ const samplePosts = [
     ],
     caption:
       'Training session success! 🎉 Charlie learned a new trick today! He can now roll over on command. So proud of my smart boy! 🐕 #BorderCollie #DogTraining #SmartDog',
+    bio: '🐕 Border Collie | Agility Champion\n🏆 Winner of 5 competitions\n🎾 Ball is life',
     likes: 789,
     comments: 65,
     shares: 37,
     timeAgo: '6h ago',
     isLiked: false,
     isSaved: false,
+    isVerified: true,
     tags: ['#BorderCollie', '#DogTraining', '#SmartDog'],
+    stats: {
+      posts: 189,
+      followers: 3421,
+      following: 678,
+    },
   },
 ];
 
@@ -245,7 +325,7 @@ function Home({navigation}) {
   };
 
   // Story Card Component
-  const StoryCard = ({story}) => {
+  const StoryCard = ({story, index}) => {
     if (story.isAddStory) {
       return (
         <TouchableOpacity style={styles.storyContainer}>
@@ -293,7 +373,16 @@ function Home({navigation}) {
     }
 
     return (
-      <TouchableOpacity style={styles.storyContainer}>
+      <TouchableOpacity
+        style={styles.storyContainer}
+        onPress={() => {
+          if (story.hasNewStory && story.stories?.length > 0) {
+            navigation.navigate('StoryViewer', {
+              storyIndex: index - 1,
+              storiesData: storiesWithContent,
+            });
+          }
+        }}>
         <Box position="relative">
           <Box
             width={70}
@@ -422,15 +511,24 @@ function Home({navigation}) {
         </HStack>
 
         {/* Single Image */}
-        <Box width="100%" height={screenWidth} bg="gray.100">
-          <Image
-            source={{uri: post.images[0]}}
-            alt={`${post.petName} photo`}
-            width="100%"
-            height="100%"
-            resizeMode="cover"
-          />
-        </Box>
+        <TouchableOpacity
+          onPress={() =>
+            navigation.navigate('PostDetail', {
+              post,
+              allPosts: posts,
+            })
+          }
+          activeOpacity={0.95}>
+          <Box width="100%" height={screenWidth} bg="gray.100">
+            <Image
+              source={{uri: post.images[0]}}
+              alt={`${post.petName} photo`}
+              width="100%"
+              height="100%"
+              resizeMode="cover"
+            />
+          </Box>
+        </TouchableOpacity>
 
         {/* Actions */}
         <Box px={4} pt={3} pb={2}>
@@ -522,8 +620,8 @@ function Home({navigation}) {
               paddingHorizontal: 16,
             }}>
             <HStack space={4}>
-              {sampleStories.map(story => (
-                <StoryCard key={story.id} story={story} />
+              {sampleStories.map((story, index) => (
+                <StoryCard key={story.id} story={story} index={index} />
               ))}
             </HStack>
           </ScrollView>

@@ -257,13 +257,10 @@ function Notifications({navigation}) {
             <TouchableOpacity onPress={() => navigation.goBack()}>
               <Ionicons name="arrow-back" size={24} color="#374151" />
             </TouchableOpacity>
-            <Text fontSize="2xl" fontFamily="heading" color="gray.800">
+            <Text fontSize="lg" fontFamily="heading" color="gray.800">
               Notifications
             </Text>
           </HStack>
-          <TouchableOpacity>
-            <Ionicons name="settings-outline" size={24} color="#374151" />
-          </TouchableOpacity>
         </HStack>
 
         {/* Tabs */}

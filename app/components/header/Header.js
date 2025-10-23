@@ -54,7 +54,8 @@ const Header = ({title = 'PawTalk'}) => {
 
         <HStack alignItems="center" space={3}>
           {/* Notifications */}
-          <TouchableOpacity>
+          <TouchableOpacity
+            onPress={() => navigation.navigate('Notifications')}>
             <Box position="relative">
               <Ionicons
                 name="notifications-outline"
@@ -76,7 +77,7 @@ const Header = ({title = 'PawTalk'}) => {
           </TouchableOpacity>
 
           {/* Messages */}
-          <TouchableOpacity>
+          <TouchableOpacity onPress={() => navigation.navigate('Messages')}>
             <Box position="relative">
               <Ionicons
                 name="chatbubble-ellipses-outline"

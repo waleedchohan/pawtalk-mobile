@@ -114,11 +114,7 @@ function Profile({navigation}) {
       <Text fontSize="xl" fontFamily="heading" color="gray.800">
         {value}
       </Text>
-      <Text
-        fontSize="xs"
-        color="gray.500"
-        fontWeight="500"
-        letterSpacing={0.3}>
+      <Text fontSize="xs" color="gray.500" fontWeight="500" letterSpacing={0.3}>
         {label}
       </Text>
     </VStack>

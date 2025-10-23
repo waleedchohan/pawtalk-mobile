@@ -1,12 +1,5 @@
 import React, {useState} from 'react';
-import {
-  Box,
-  Text,
-  VStack,
-  HStack,
-  Avatar,
-  Image,
-} from 'native-base';
+import {Box, Text, VStack, HStack, Avatar, Image} from 'native-base';
 import {
   TouchableOpacity,
   StyleSheet,
@@ -55,7 +48,7 @@ function PostDetail({navigation, route}) {
   const initialPost = route?.params?.post || {};
   const allPosts = route?.params?.allPosts || [initialPost];
   const initialIndex = route?.params?.initialIndex || 0;
-  
+
   const [posts, setPosts] = useState(
     allPosts.map(p => ({
       ...p,
