@@ -1,13 +1,5 @@
 import React, {useState, useEffect, useRef} from 'react';
-import {
-  Box,
-  Text,
-  VStack,
-  HStack,
-  Avatar,
-  Image,
-  Input,
-} from 'native-base';
+import {Box, Text, VStack, HStack, Avatar, Image, Input} from 'native-base';
 import {
   TouchableOpacity,
   StyleSheet,
@@ -68,7 +60,7 @@ const storiesData = [
 
 function StoryViewer({navigation, route}) {
   const initialStoryIndex = route?.params?.storyIndex || 0;
-  const storiesSet = storiesData;
+  const storiesSet = route?.params?.storiesData || storiesData;
 
   const [currentUserIndex, setCurrentUserIndex] = useState(initialStoryIndex);
   const [currentStoryIndex, setCurrentStoryIndex] = useState(0);
@@ -334,4 +326,3 @@ const styles = StyleSheet.create({
 });
 
 export default StoryViewer;
-
