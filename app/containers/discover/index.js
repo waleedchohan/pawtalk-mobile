@@ -1,13 +1,5 @@
 import React, {useState} from 'react';
-import {
-  Box,
-  Text,
-  VStack,
-  HStack,
-  Input,
-  ScrollView,
-  Image,
-} from 'native-base';
+import {Box, Text, VStack, HStack, Input, ScrollView, Image} from 'native-base';
 import {
   TouchableOpacity,
   StyleSheet,
@@ -30,11 +22,11 @@ const filters = [
   {id: 'new', label: 'New', icon: 'sparkles'},
 ];
 
-// Sample discover posts (mixed content)
+// Sample discover posts (mixed content) with reliable placeholder images
 const discoverPosts = [
   {
     id: 1,
-    image: 'https://images.unsplash.com/photo-1552053831-71594a27632d?w=600',
+    image: 'https://picsum.photos/600/600?random=1',
     petName: 'Buddy',
     petType: 'dog',
     likes: 1234,
@@ -43,8 +35,7 @@ const discoverPosts = [
   },
   {
     id: 2,
-    image:
-      'https://images.unsplash.com/photo-1574158622682-e40e69881006?w=600',
+    image: 'https://picsum.photos/600/600?random=2',
     petName: 'Whiskers',
     petType: 'cat',
     likes: 2345,
@@ -53,8 +44,7 @@ const discoverPosts = [
   },
   {
     id: 3,
-    image:
-      'https://images.unsplash.com/photo-1583337130417-3346a1be7dee?w=600',
+    image: 'https://picsum.photos/600/600?random=3',
     petName: 'Charlie',
     petType: 'dog',
     likes: 987,
@@ -63,8 +53,7 @@ const discoverPosts = [
   },
   {
     id: 4,
-    image:
-      'https://images.unsplash.com/photo-1568572933382-74d440642117?w=600',
+    image: 'https://picsum.photos/600/600?random=4',
     petName: 'Max',
     petType: 'dog',
     likes: 3456,
@@ -73,8 +62,7 @@ const discoverPosts = [
   },
   {
     id: 5,
-    image:
-      'https://images.unsplash.com/photo-1513360371669-4adf3dd7dff8?w=600',
+    image: 'https://picsum.photos/600/600?random=5',
     petName: 'Luna',
     petType: 'cat',
     likes: 2987,
@@ -83,8 +71,7 @@ const discoverPosts = [
   },
   {
     id: 6,
-    image:
-      'https://images.unsplash.com/photo-1537151608828-ea2b11777ee8?w=600',
+    image: 'https://picsum.photos/600/600?random=6',
     petName: 'Rocky',
     petType: 'dog',
     likes: 1567,
@@ -93,8 +80,7 @@ const discoverPosts = [
   },
   {
     id: 7,
-    image:
-      'https://images.unsplash.com/photo-1561037404-61cd46aa615b?w=600',
+    image: 'https://picsum.photos/600/600?random=7',
     petName: 'Bella',
     petType: 'dog',
     likes: 4123,
@@ -103,8 +89,7 @@ const discoverPosts = [
   },
   {
     id: 8,
-    image:
-      'https://images.unsplash.com/photo-1543466835-00a7907e9de1?w=600',
+    image: 'https://picsum.photos/600/600?random=8',
     petName: 'Milo',
     petType: 'cat',
     likes: 1876,
@@ -113,8 +98,7 @@ const discoverPosts = [
   },
   {
     id: 9,
-    image:
-      'https://images.unsplash.com/photo-1517849845537-4d257902454a?w=600',
+    image: 'https://picsum.photos/600/600?random=9',
     petName: 'Daisy',
     petType: 'dog',
     likes: 2234,
@@ -123,8 +107,7 @@ const discoverPosts = [
   },
   {
     id: 10,
-    image:
-      'https://images.unsplash.com/photo-1587300003388-59208cc962cb?w=600',
+    image: 'https://picsum.photos/600/600?random=10',
     petName: 'Oliver',
     petType: 'dog',
     likes: 3678,
@@ -133,8 +116,7 @@ const discoverPosts = [
   },
   {
     id: 11,
-    image:
-      'https://images.unsplash.com/photo-1518791841217-8f162f1e1131?w=600',
+    image: 'https://picsum.photos/600/600?random=11',
     petName: 'Simba',
     petType: 'cat',
     likes: 2543,
@@ -143,12 +125,65 @@ const discoverPosts = [
   },
   {
     id: 12,
-    image:
-      'https://images.unsplash.com/photo-1600804889194-e6fbf08f0259?w=600',
+    image: 'https://picsum.photos/600/600?random=12',
     petName: 'Cooper',
     petType: 'dog',
     likes: 1987,
     comments: 134,
+    isVerified: true,
+  },
+  {
+    id: 13,
+    image: 'https://picsum.photos/600/600?random=13',
+    petName: 'Zoe',
+    petType: 'cat',
+    likes: 1645,
+    comments: 102,
+    isVerified: true,
+  },
+  {
+    id: 14,
+    image: 'https://picsum.photos/600/600?random=14',
+    petName: 'Duke',
+    petType: 'dog',
+    likes: 2876,
+    comments: 201,
+    isVerified: true,
+  },
+  {
+    id: 15,
+    image: 'https://picsum.photos/600/600?random=15',
+    petName: 'Chloe',
+    petType: 'cat',
+    likes: 1234,
+    comments: 87,
+    isVerified: false,
+  },
+  {
+    id: 16,
+    image: 'https://picsum.photos/600/600?random=16',
+    petName: 'Tucker',
+    petType: 'dog',
+    likes: 3987,
+    comments: 267,
+    isVerified: true,
+  },
+  {
+    id: 17,
+    image: 'https://picsum.photos/600/600?random=17',
+    petName: 'Mittens',
+    petType: 'cat',
+    likes: 2156,
+    comments: 143,
+    isVerified: true,
+  },
+  {
+    id: 18,
+    image: 'https://picsum.photos/600/600?random=18',
+    petName: 'Bear',
+    petType: 'dog',
+    likes: 4567,
+    comments: 345,
     isVerified: true,
   },
 ];
@@ -190,11 +225,18 @@ function Discover({navigation}) {
   const DiscoverPostItem = ({post, index}) => {
     // Vary the heights for more dynamic grid (like Instagram)
     const isLarge = index % 7 === 0 || index % 11 === 0;
-    const height = isLarge ? screenWidth * 0.65 : screenWidth / 3;
+    const itemWidth = screenWidth / 3;
+    const height = isLarge ? screenWidth * 0.65 : itemWidth;
 
     return (
       <TouchableOpacity
-        style={[styles.gridItem, {height}]}
+        style={{
+          width: itemWidth,
+          height: height,
+          borderWidth: 0.5,
+          borderColor: 'white',
+          position: 'relative',
+        }}
         onPress={() =>
           navigation.navigate('PostDetail', {
             post: {
@@ -202,7 +244,9 @@ function Discover({navigation}) {
               images: [post.image],
               avatar: post.image,
               caption: `Amazing photo from ${post.petName}! 🐾`,
-              bio: `${post.petType.charAt(0).toUpperCase() + post.petType.slice(1)} lover`,
+              bio: `${
+                post.petType.charAt(0).toUpperCase() + post.petType.slice(1)
+              } lover`,
               ownerName: `${post.petName}'s Owner`,
               username: `@${post.petName.toLowerCase()}`,
               timeAgo: '1h ago',
@@ -213,7 +257,9 @@ function Discover({navigation}) {
               images: [p.image],
               avatar: p.image,
               caption: `Amazing photo from ${p.petName}! 🐾`,
-              bio: `${p.petType.charAt(0).toUpperCase() + p.petType.slice(1)} lover`,
+              bio: `${
+                p.petType.charAt(0).toUpperCase() + p.petType.slice(1)
+              } lover`,
               ownerName: `${p.petName}'s Owner`,
               username: `@${p.petName.toLowerCase()}`,
               timeAgo: '1h ago',
@@ -489,28 +535,22 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.primary,
     borderColor: Colors.primary,
   },
-  gridItem: {
-    width: screenWidth / 3,
-    borderWidth: 0.5,
-    borderColor: 'white',
-    position: 'relative',
-  },
   imageOverlay: {
     position: 'absolute',
-    top: 8,
+    bottom: 8,
     left: 8,
-    backgroundColor: 'rgba(0,0,0,0.5)',
+    backgroundColor: 'rgba(0,0,0,0.6)',
     paddingHorizontal: 8,
     paddingVertical: 4,
-    borderRadius: 12,
+    borderRadius: 8,
   },
   verifiedBadge: {
     position: 'absolute',
     top: 8,
     right: 8,
     backgroundColor: Colors.primary,
-    padding: 4,
-    borderRadius: 12,
+    padding: 3,
+    borderRadius: 10,
   },
   featuredCard: {
     width: 140,
