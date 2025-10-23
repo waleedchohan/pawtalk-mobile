@@ -223,19 +223,15 @@ function Discover({navigation}) {
   const filteredPosts = getFilteredPosts();
 
   const DiscoverPostItem = ({post, index}) => {
-    // Vary the heights for more dynamic grid (like Instagram)
-    const isLarge = index % 7 === 0 || index % 11 === 0;
-    const itemWidth = screenWidth / 3;
-    const height = isLarge ? screenWidth * 0.65 : itemWidth;
+    const itemSize = screenWidth / 3;
 
     return (
       <TouchableOpacity
         style={{
-          width: itemWidth,
-          height: height,
+          width: itemSize,
+          height: itemSize,
           borderWidth: 0.5,
           borderColor: 'white',
-          position: 'relative',
         }}
         onPress={() =>
           navigation.navigate('PostDetail', {
@@ -267,46 +263,15 @@ function Discover({navigation}) {
             })),
           })
         }>
-        <Image
-          source={{uri: post.image}}
-          alt={post.petName}
-          width="100%"
-          height="100%"
-          resizeMode="cover"
-        />
-
-        {/* Overlay with engagement stats */}
-        <Box style={styles.imageOverlay}>
-          <HStack space={3} alignItems="center">
-            <HStack alignItems="center" space={1}>
-              <MaterialCommunityIcons name="heart" size={18} color="white" />
-              <Text fontSize="sm" fontFamily="heading" color="white">
-                {post.likes > 1000
-                  ? `${(post.likes / 1000).toFixed(1)}k`
-                  : post.likes}
-              </Text>
-            </HStack>
-            {post.comments > 0 && (
-              <HStack alignItems="center" space={1}>
-                <Ionicons name="chatbubble" size={16} color="white" />
-                <Text fontSize="sm" fontFamily="heading" color="white">
-                  {post.comments}
-                </Text>
-              </HStack>
-            )}
-          </HStack>
+        <Box width="100%" height="100%" bg="gray.200">
+          <Image
+            source={{uri: post.image}}
+            alt={post.petName}
+            width="100%"
+            height="100%"
+            resizeMode="cover"
+          />
         </Box>
-
-        {/* Verified badge */}
-        {post.isVerified && (
-          <Box style={styles.verifiedBadge}>
-            <MaterialCommunityIcons
-              name="check-decagram"
-              size={16}
-              color="white"
-            />
-          </Box>
-        )}
       </TouchableOpacity>
     );
   };
@@ -341,7 +306,7 @@ function Discover({navigation}) {
     <Box flex={1} bg="#F9FAFB">
       {/* Header with Search */}
       <Box bg="white" pt={12} pb={3} px={4} shadow={1}>
-        <Text fontSize="2xl" fontFamily="heading" color="gray.800" mb={3}>
+        <Text fontSize="lg" fontFamily="heading" color="gray.800" mb={3}>
           Discover
         </Text>
 
@@ -398,37 +363,6 @@ function Discover({navigation}) {
         }
         contentContainerStyle={{paddingBottom: 100}}>
         {/* Stats Banner */}
-        <Box bg="white" px={4} py={3} mb={2}>
-          <HStack justifyContent="space-around">
-            <VStack alignItems="center">
-              <Text fontSize="lg" fontFamily="heading" color="gray.800">
-                {filteredPosts.length}
-              </Text>
-              <Text fontSize="xs" color="gray.500">
-                Posts
-              </Text>
-            </VStack>
-            <VStack alignItems="center">
-              <Text fontSize="lg" fontFamily="heading" color="gray.800">
-                {filteredPosts
-                  .reduce((sum, post) => sum + post.likes, 0)
-                  .toLocaleString()}
-              </Text>
-              <Text fontSize="xs" color="gray.500">
-                Total Likes
-              </Text>
-            </VStack>
-            <VStack alignItems="center">
-              <Text fontSize="lg" fontFamily="heading" color={Colors.primary}>
-                {selectedFilter.charAt(0).toUpperCase() +
-                  selectedFilter.slice(1)}
-              </Text>
-              <Text fontSize="xs" color="gray.500">
-                Category
-              </Text>
-            </VStack>
-          </HStack>
-        </Box>
 
         {/* Dynamic Grid */}
         <Box bg="white">

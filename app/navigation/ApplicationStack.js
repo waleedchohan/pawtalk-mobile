@@ -33,7 +33,7 @@ const CustomTabBar = ({state, descriptors, navigation}) => {
             Home: {name: 'home-variant', size: 24},
             Discover: {name: 'compass-outline', size: 26},
             Post: {name: 'plus', size: 32},
-            Translate: {name: 'translate', size: 24},
+            PawTalk: {name: 'microphone', size: 24},
             Profile: {name: 'account-circle-outline', size: 26},
           }[label];
 
@@ -181,7 +181,7 @@ const ApplicationStack = () => {
       <Tab.Screen name="Home" component={Home} />
       <Tab.Screen name="Discover" component={Discover} />
       <Tab.Screen name="Post" component={Post} />
-      <Tab.Screen name="Translate" component={Translate} />
+      <Tab.Screen name="PawTalk" component={Translate} />
       <Tab.Screen name="Profile" component={Profile} />
     </Tab.Navigator>
   );
