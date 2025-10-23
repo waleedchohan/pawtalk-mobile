@@ -32,8 +32,7 @@ const sampleProfileData = {
   username: '@buddythegolden',
   bio: '🐕 Golden Retriever living my best life\n📍 New York, NY\n🎾 Ball enthusiast & treat connoisseur',
   avatar: 'https://images.unsplash.com/photo-1552053831-71594a27632d?w=400',
-  coverImage:
-    'https://images.unsplash.com/photo-1548199973-03cce0bbc87b?w=800',
+  coverImage: 'https://images.unsplash.com/photo-1548199973-03cce0bbc87b?w=800',
   stats: {
     posts: 156,
     followers: 2847,
@@ -59,29 +58,25 @@ const samplePosts = [
   },
   {
     id: 3,
-    image:
-      'https://images.unsplash.com/photo-1537151608828-ea2b11777ee8?w=400',
+    image: 'https://images.unsplash.com/photo-1537151608828-ea2b11777ee8?w=400',
     likes: 456,
     comments: 78,
   },
   {
     id: 4,
-    image:
-      'https://images.unsplash.com/photo-1583337130417-3346a1be7dee?w=400',
+    image: 'https://images.unsplash.com/photo-1583337130417-3346a1be7dee?w=400',
     likes: 312,
     comments: 56,
   },
   {
     id: 5,
-    image:
-      'https://images.unsplash.com/photo-1561037404-61cd46aa615b?w=400',
+    image: 'https://images.unsplash.com/photo-1561037404-61cd46aa615b?w=400',
     likes: 523,
     comments: 91,
   },
   {
     id: 6,
-    image:
-      'https://images.unsplash.com/photo-1587300003388-59208cc962cb?w=400',
+    image: 'https://images.unsplash.com/photo-1587300003388-59208cc962cb?w=400',
     likes: 278,
     comments: 43,
   },
@@ -93,23 +88,42 @@ const samplePosts = [
   },
   {
     id: 8,
-    image:
-      'https://images.unsplash.com/photo-1543466835-00a7907e9de1?w=400',
+    image: 'https://images.unsplash.com/photo-1543466835-00a7907e9de1?w=400',
     likes: 367,
     comments: 52,
   },
   {
     id: 9,
-    image:
-      'https://images.unsplash.com/photo-1600804889194-e6fbf08f0259?w=400',
+    image: 'https://images.unsplash.com/photo-1600804889194-e6fbf08f0259?w=400',
     likes: 445,
     comments: 73,
   },
 ];
 
 function PetProfile({navigation, route}) {
-  // In real app, you'd get this from route.params
-  const profileData = route?.params?.profile || sampleProfileData;
+  // Transform post data to profile format if needed
+  const passedData = route?.params?.profile;
+  
+  // If we received a post object, transform it to profile format
+  const profileData = passedData
+    ? {
+        id: passedData.id || 1,
+        petName: passedData.petName || 'Pet',
+        petType: passedData.petType || 'Unknown',
+        ownerName: passedData.ownerName || 'Owner',
+        username: passedData.username || '@pet',
+        bio: passedData.bio || passedData.caption || '🐾 Pet profile',
+        avatar: passedData.avatar || passedData.images?.[0] || sampleProfileData.avatar,
+        coverImage: passedData.images?.[0] || passedData.coverImage || sampleProfileData.coverImage,
+        stats: passedData.stats || {
+          posts: passedData.posts || 0,
+          followers: passedData.followers || 0,
+          following: passedData.following || 0,
+        },
+        isFollowing: passedData.isFollowing || false,
+        isVerified: passedData.isVerified || false,
+      }
+    : sampleProfileData;
 
   const [isFollowing, setIsFollowing] = useState(profileData.isFollowing);
   const [refreshing, setRefreshing] = useState(false);
@@ -191,7 +205,11 @@ function PetProfile({navigation, route}) {
             </TouchableOpacity>
             <HStack space={3}>
               <TouchableOpacity style={styles.headerButton}>
-                <Ionicons name="notifications-outline" size={24} color="white" />
+                <Ionicons
+                  name="notifications-outline"
+                  size={24}
+                  color="white"
+                />
               </TouchableOpacity>
               <TouchableOpacity style={styles.headerButton}>
                 <Ionicons name="ellipsis-vertical" size={24} color="white" />
@@ -220,7 +238,11 @@ function PetProfile({navigation, route}) {
         </Box>
 
         {/* Profile Info Section */}
-        <Box bg="white" mt={-40} borderTopLeftRadius={30} borderTopRightRadius={30}>
+        <Box
+          bg="white"
+          mt={-40}
+          borderTopLeftRadius={30}
+          borderTopRightRadius={30}>
           {/* Avatar */}
           <Center mt={-50}>
             <Box position="relative">
@@ -332,10 +354,7 @@ function PetProfile({navigation, route}) {
         {/* Tabs */}
         <HStack bg="white" shadow={1} mt={2}>
           <TouchableOpacity
-            style={[
-              styles.tab,
-              selectedTab === 'posts' && styles.activeTab,
-            ]}
+            style={[styles.tab, selectedTab === 'posts' && styles.activeTab]}
             onPress={() => setSelectedTab('posts')}>
             <MaterialCommunityIcons
               name="grid"
@@ -344,10 +363,7 @@ function PetProfile({navigation, route}) {
             />
           </TouchableOpacity>
           <TouchableOpacity
-            style={[
-              styles.tab,
-              selectedTab === 'tagged' && styles.activeTab,
-            ]}
+            style={[styles.tab, selectedTab === 'tagged' && styles.activeTab]}
             onPress={() => setSelectedTab('tagged')}>
             <MaterialCommunityIcons
               name="account-box-outline"
@@ -459,4 +475,3 @@ const styles = StyleSheet.create({
 });
 
 export default PetProfile;
-

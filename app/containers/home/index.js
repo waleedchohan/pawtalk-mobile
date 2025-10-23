@@ -340,74 +340,78 @@ function Home({navigation}) {
       <Box bg="white" borderRadius={16} shadow={3} mb={5} overflow="hidden">
         {/* Header */}
         <HStack p={4} alignItems="center" justifyContent="space-between">
-          <HStack alignItems="center" space={3} flex={1}>
-            <Box position="relative">
-              <Avatar size="md" bg="#E8FAF3" source={{uri: post.avatar}}>
-                <Text fontSize="xl">🐾</Text>
-              </Avatar>
-              <Box
-                position="absolute"
-                bottom={-2}
-                right={-2}
-                bg="green.400"
-                borderRadius={10}
-                width={4}
-                height={4}
-                borderWidth={2}
-                borderColor="white"
-              />
-            </Box>
-            <VStack flex={1}>
-              <HStack alignItems="center" space={2}>
-                <Text
-                  fontFamily="heading"
-                  fontSize="md"
-                  color="gray.800"
-                  fontWeight="bold">
-                  {post.petName}
+          <TouchableOpacity
+            onPress={() => navigation.navigate('PetProfile', {profile: post})}
+            style={{flex: 1}}>
+            <HStack alignItems="center" space={3} flex={1}>
+              <Box position="relative">
+                <Avatar size="md" bg="#E8FAF3" source={{uri: post.avatar}}>
+                  <Text fontSize="xl">🐾</Text>
+                </Avatar>
+                <Box
+                  position="absolute"
+                  bottom={-2}
+                  right={-2}
+                  bg="green.400"
+                  borderRadius={10}
+                  width={4}
+                  height={4}
+                  borderWidth={2}
+                  borderColor="white"
+                />
+              </Box>
+              <VStack flex={1}>
+                <HStack alignItems="center" space={2}>
+                  <Text
+                    fontFamily="heading"
+                    fontSize="md"
+                    color="gray.800"
+                    fontWeight="bold">
+                    {post.petName}
+                  </Text>
+                  <Badge
+                    bg="#E8FAF3"
+                    borderRadius="full"
+                    px={2}
+                    py={0.5}
+                    _text={{
+                      fontSize: '2xs',
+                      color: '#2D9D78',
+                      fontWeight: 'semibold',
+                    }}>
+                    {post.petType}
+                  </Badge>
+                </HStack>
+                <HStack alignItems="center" space={1}>
+                  <Text fontSize="xs" color="gray.600">
+                    {post.ownerName}
+                  </Text>
+                  {post.location && (
+                    <>
+                      <Text fontSize="xs" color="gray.400">
+                        •
+                      </Text>
+                      <Ionicons
+                        name="location-outline"
+                        size={12}
+                        color="#9CA3AF"
+                      />
+                      <Text
+                        fontSize="xs"
+                        color="gray.500"
+                        numberOfLines={1}
+                        flex={1}>
+                        {post.location}
+                      </Text>
+                    </>
+                  )}
+                </HStack>
+                <Text fontSize="xs" color="gray.400">
+                  {post.timeAgo}
                 </Text>
-                <Badge
-                  bg="#E8FAF3"
-                  borderRadius="full"
-                  px={2}
-                  py={0.5}
-                  _text={{
-                    fontSize: '2xs',
-                    color: '#2D9D78',
-                    fontWeight: 'semibold',
-                  }}>
-                  {post.petType}
-                </Badge>
-              </HStack>
-              <HStack alignItems="center" space={1}>
-                <Text fontSize="xs" color="gray.600">
-                  {post.ownerName}
-                </Text>
-                {post.location && (
-                  <>
-                    <Text fontSize="xs" color="gray.400">
-                      •
-                    </Text>
-                    <Ionicons
-                      name="location-outline"
-                      size={12}
-                      color="#9CA3AF"
-                    />
-                    <Text
-                      fontSize="xs"
-                      color="gray.500"
-                      numberOfLines={1}
-                      flex={1}>
-                      {post.location}
-                    </Text>
-                  </>
-                )}
-              </HStack>
-              <Text fontSize="xs" color="gray.400">
-                {post.timeAgo}
-              </Text>
-            </VStack>
-          </HStack>
+              </VStack>
+            </HStack>
+          </TouchableOpacity>
           <TouchableOpacity style={styles.moreButton}>
             <MaterialCommunityIcons
               name="dots-vertical"
