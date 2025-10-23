@@ -194,7 +194,13 @@ function PetProfile({navigation, route}) {
           <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
         }>
         {/* Header */}
-        <Box bg="white" pt={12} pb={3} px={4} borderBottomWidth={1} borderBottomColor="gray.100">
+        <Box
+          bg="white"
+          pt={12}
+          pb={3}
+          px={4}
+          borderBottomWidth={1}
+          borderBottomColor="gray.100">
           <HStack alignItems="center" justifyContent="space-between">
             <TouchableOpacity onPress={() => navigation.goBack()}>
               <Ionicons name="arrow-back" size={24} color="#374151" />
@@ -335,7 +341,7 @@ function PetProfile({navigation, route}) {
 
         {/* Posts Grid */}
         <Box bg="white" pb={100}>
-          <HStack flexWrap="wrap" m={0.5}>
+          <HStack flexWrap="wrap">
             {samplePosts.map(post => (
               <PostGridItem key={post.id} post={post} />
             ))}
@@ -409,9 +415,10 @@ const styles = StyleSheet.create({
     borderBottomColor: '#374151',
   },
   gridItem: {
-    width: (screenWidth - 3) / 3,
-    height: (screenWidth - 3) / 3,
-    margin: 0.5,
+    width: screenWidth / 3,
+    height: screenWidth / 3,
+    borderWidth: 0.5,
+    borderColor: 'white',
     position: 'relative',
   },
   gridOverlay: {
