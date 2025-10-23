@@ -508,7 +508,7 @@ function Home({navigation}) {
 
       <ScrollView
         showsVerticalScrollIndicator={false}
-        contentContainerStyle={{paddingBottom: 30}}>
+        contentContainerStyle={{paddingBottom: 180}}>
         {/* Enhanced Stories Section */}
         <Box bg="white" mb={2} py={3} shadow={1}>
           <ScrollView
