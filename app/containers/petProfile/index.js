@@ -158,7 +158,9 @@ function PetProfile({navigation, route}) {
   );
 
   const PostGridItem = ({post}) => (
-    <TouchableOpacity style={styles.gridItem}>
+    <TouchableOpacity
+      style={styles.gridItem}
+      onPress={() => navigation.navigate('PostDetail', {post: {...profileData, ...post, image: post.image}})}>
       <Image
         source={{uri: post.image}}
         alt="Post"

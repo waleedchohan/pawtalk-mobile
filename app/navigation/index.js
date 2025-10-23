@@ -6,6 +6,7 @@ import ApplicationStack from './ApplicationStack';
 import Notifications from '../containers/notifications';
 import Messages from '../containers/messages';
 import PetProfile from '../containers/petProfile';
+import PostDetail from '../containers/postDetail';
 
 const RootStack = createNativeStackNavigator();
 const MainStack = createNativeStackNavigator();
@@ -40,6 +41,14 @@ function MainNavigator() {
         options={{
           presentation: 'card',
           animation: 'slide_from_right',
+        }}
+      />
+      <MainStack.Screen
+        name="PostDetail"
+        component={PostDetail}
+        options={{
+          presentation: 'card',
+          animation: 'slide_from_bottom',
         }}
       />
     </MainStack.Navigator>
