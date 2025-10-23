@@ -1,49 +1,54 @@
-import React from "react";
-import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import React from 'react';
+import {createNativeStackNavigator} from '@react-navigation/native-stack';
 
-import AuthStack from "./AuthStack";
-import ApplicationStack from "./ApplicationStack";
-import Notifications from "../containers/notifications";
-import Messages from "../containers/messages";
+import AuthStack from './AuthStack';
+import ApplicationStack from './ApplicationStack';
+import Notifications from '../containers/notifications';
+import Messages from '../containers/messages';
 
-const rootStack = createNativeStackNavigator();
+const RootStack = createNativeStackNavigator();
+const MainStack = createNativeStackNavigator();
 
-function RootStack() {
-	return (
-		<rootStack.Navigator initialRouteName="Login">
-			<rootStack.Screen
-				name="Login"
-				component={AuthStack}
-				options={{
-					headerShown: false,
-				}}
-			/>
-
-			<rootStack.Screen
-				name="Home"
-				component={ApplicationStack}
-				options={{
-					headerShown: false,
-				}}
-			/>
-
-			<rootStack.Screen
-				name="Notifications"
-				component={Notifications}
-				options={{
-					headerShown: false,
-				}}
-			/>
-
-			<rootStack.Screen
-				name="Messages"
-				component={Messages}
-				options={{
-					headerShown: false,
-				}}
-			/>
-		</rootStack.Navigator>
-	);
+// Main app stack with tabs and modal screens
+function MainNavigator() {
+  return (
+    <MainStack.Navigator
+      screenOptions={{
+        headerShown: false,
+      }}>
+      <MainStack.Screen name="Tabs" component={ApplicationStack} />
+      <MainStack.Screen
+        name="Notifications"
+        component={Notifications}
+        options={{
+          presentation: 'card',
+          animation: 'slide_from_right',
+        }}
+      />
+      <MainStack.Screen
+        name="Messages"
+        component={Messages}
+        options={{
+          presentation: 'card',
+          animation: 'slide_from_right',
+        }}
+      />
+    </MainStack.Navigator>
+  );
 }
 
-export default RootStack;
+// Root navigation
+function RootNavigator() {
+  return (
+    <RootStack.Navigator
+      initialRouteName="Login"
+      screenOptions={{
+        headerShown: false,
+      }}>
+      <RootStack.Screen name="Login" component={AuthStack} />
+      <RootStack.Screen name="Home" component={MainNavigator} />
+    </RootStack.Navigator>
+  );
+}
+
+export default RootNavigator;
