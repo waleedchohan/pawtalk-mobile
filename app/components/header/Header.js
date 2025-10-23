@@ -49,7 +49,6 @@ const Header = ({title = 'PawTalk'}) => {
             <Text fontSize="lg" fontFamily={'heading'} color="#2D9D78">
               {title}
             </Text>
-            <MaterialCommunityIcons name="paw" size={18} color="#6FE5A9" />
           </HStack>
         </HStack>
 
