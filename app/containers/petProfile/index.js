@@ -103,7 +103,7 @@ const samplePosts = [
 function PetProfile({navigation, route}) {
   // Transform post data to profile format if needed
   const passedData = route?.params?.profile;
-  
+
   // If we received a post object, transform it to profile format
   const profileData = passedData
     ? {
@@ -113,8 +113,14 @@ function PetProfile({navigation, route}) {
         ownerName: passedData.ownerName || 'Owner',
         username: passedData.username || '@pet',
         bio: passedData.bio || passedData.caption || '🐾 Pet profile',
-        avatar: passedData.avatar || passedData.images?.[0] || sampleProfileData.avatar,
-        coverImage: passedData.images?.[0] || passedData.coverImage || sampleProfileData.coverImage,
+        avatar:
+          passedData.avatar ||
+          passedData.images?.[0] ||
+          sampleProfileData.avatar,
+        coverImage:
+          passedData.images?.[0] ||
+          passedData.coverImage ||
+          sampleProfileData.coverImage,
         stats: passedData.stats || {
           posts: passedData.posts || 0,
           followers: passedData.followers || 0,
@@ -181,185 +187,139 @@ function PetProfile({navigation, route}) {
   );
 
   return (
-    <Box flex={1} bg="#F9FAFB">
+    <Box flex={1} bg="white">
       <ScrollView
         showsVerticalScrollIndicator={false}
         refreshControl={
           <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
         }>
-        {/* Header with Back Button */}
-        <Box
-          position="absolute"
-          top={0}
-          left={0}
-          right={0}
-          zIndex={10}
-          pt={12}
-          px={4}
-          pb={3}>
+        {/* Header */}
+        <Box bg="white" pt={12} pb={3} px={4} borderBottomWidth={1} borderBottomColor="gray.100">
           <HStack alignItems="center" justifyContent="space-between">
-            <TouchableOpacity
-              onPress={() => navigation.goBack()}
-              style={styles.headerButton}>
-              <Ionicons name="arrow-back" size={24} color="white" />
+            <TouchableOpacity onPress={() => navigation.goBack()}>
+              <Ionicons name="arrow-back" size={24} color="#374151" />
             </TouchableOpacity>
-            <HStack space={3}>
-              <TouchableOpacity style={styles.headerButton}>
-                <Ionicons
-                  name="notifications-outline"
-                  size={24}
-                  color="white"
+            <HStack alignItems="center" space={2}>
+              <Text fontSize="lg" fontFamily="heading" color="gray.800">
+                {profileData.username}
+              </Text>
+              {profileData.isVerified && (
+                <MaterialCommunityIcons
+                  name="check-decagram"
+                  size={18}
+                  color={Colors.primary}
                 />
-              </TouchableOpacity>
-              <TouchableOpacity style={styles.headerButton}>
-                <Ionicons name="ellipsis-vertical" size={24} color="white" />
-              </TouchableOpacity>
+              )}
             </HStack>
+            <TouchableOpacity>
+              <Ionicons name="ellipsis-vertical" size={24} color="#374151" />
+            </TouchableOpacity>
           </HStack>
         </Box>
 
-        {/* Cover Image */}
-        <Box position="relative" height={220}>
-          <Image
-            source={{uri: profileData.coverImage}}
-            alt="Cover"
-            width="100%"
-            height="100%"
-            resizeMode="cover"
-          />
-          <Box
-            position="absolute"
-            bottom={0}
-            left={0}
-            right={0}
-            height={100}
-            bg="linear-gradient(transparent, rgba(0,0,0,0.4))"
-          />
-        </Box>
-
         {/* Profile Info Section */}
-        <Box
-          bg="white"
-          mt={-40}
-          borderTopLeftRadius={30}
-          borderTopRightRadius={30}>
-          {/* Avatar */}
-          <Center mt={-50}>
+        <Box bg="white" px={4} pt={4}>
+          {/* Avatar and Stats Row */}
+          <HStack space={4} alignItems="center">
+            {/* Avatar */}
             <Box position="relative">
               <Avatar
                 source={{uri: profileData.avatar}}
-                size="2xl"
-                borderWidth={5}
-                borderColor="white"
-                shadow={4}
+                size="xl"
+                bg="gray.200"
               />
               {profileData.isVerified && (
                 <Box
                   position="absolute"
-                  bottom={2}
-                  right={2}
+                  bottom={0}
+                  right={0}
                   bg={Colors.primary}
-                  p={1.5}
+                  p={1}
                   borderRadius="full"
-                  borderWidth={3}
+                  borderWidth={2}
                   borderColor="white">
                   <MaterialCommunityIcons
-                    name="check-decagram"
-                    size={16}
+                    name="check"
+                    size={12}
                     color="white"
                   />
                 </Box>
               )}
             </Box>
-          </Center>
+
+            {/* Stats */}
+            <HStack flex={1} justifyContent="space-around">
+              <StatCard label="Posts" value={profileData.stats.posts} />
+              <StatCard
+                label="Followers"
+                value={profileData.stats.followers.toLocaleString()}
+              />
+              <StatCard label="Following" value={profileData.stats.following} />
+            </HStack>
+          </HStack>
 
           {/* Name and Bio */}
-          <VStack alignItems="center" mt={4} px={5} space={1}>
+          <VStack mt={4} space={1}>
             <HStack alignItems="center" space={2}>
-              <Text fontSize="2xl" fontFamily="heading" color="gray.800">
+              <Text fontSize="lg" fontFamily="heading" color="gray.800">
                 {profileData.petName}
               </Text>
+              <Badge
+                bg="#E8FAF3"
+                borderRadius="full"
+                px={2.5}
+                py={0.5}
+                _text={{
+                  fontSize: '2xs',
+                  color: '#2D9D78',
+                  fontWeight: '600',
+                }}>
+                {profileData.petType}
+              </Badge>
             </HStack>
-            <Badge
-              bg="#E8FAF3"
-              borderRadius="full"
-              px={3}
-              py={1}
-              _text={{
-                fontSize: 'xs',
-                color: '#2D9D78',
-                fontWeight: '600',
-              }}>
-              {profileData.petType}
-            </Badge>
-            <Text fontSize="sm" color="gray.500" fontWeight="500" mt={1}>
-              {profileData.username}
+            <Text fontSize="sm" color="gray.500">
+              {profileData.ownerName}
             </Text>
-            <Text
-              fontSize="sm"
-              color="gray.600"
-              textAlign="center"
-              mt={3}
-              px={6}>
+            <Text fontSize="sm" color="gray.700" mt={2}>
               {profileData.bio}
             </Text>
           </VStack>
 
-          {/* Stats */}
-          <HStack mt={6} mb={4} px={8} justifyContent="space-around">
-            <StatCard label="Posts" value={profileData.stats.posts} />
-            <StatCard
-              label="Followers"
-              value={profileData.stats.followers.toLocaleString()}
-            />
-            <StatCard label="Following" value={profileData.stats.following} />
-          </HStack>
-
           {/* Action Buttons */}
-          <HStack space={3} px={5} mt={2} mb={5}>
+          <HStack space={2} mt={4} mb={3}>
             <TouchableOpacity
               onPress={handleFollow}
               style={[
                 styles.actionButton,
                 isFollowing ? styles.followingButton : styles.followButton,
               ]}>
-              <HStack alignItems="center" space={2}>
-                <Ionicons
-                  name={isFollowing ? 'checkmark' : 'person-add'}
-                  size={18}
-                  color={isFollowing ? Colors.primary : 'white'}
-                />
-                <Text
-                  fontSize="sm"
-                  fontFamily="heading"
-                  color={isFollowing ? Colors.primary : 'white'}>
-                  {isFollowing ? 'Following' : 'Follow'}
-                </Text>
-              </HStack>
+              <Text
+                fontSize="sm"
+                fontFamily="heading"
+                color={isFollowing ? 'gray.800' : 'white'}>
+                {isFollowing ? 'Following' : 'Follow'}
+              </Text>
             </TouchableOpacity>
             <TouchableOpacity style={styles.messageButton}>
-              <HStack alignItems="center" space={2}>
-                <Ionicons name="chatbubble-outline" size={18} color="#374151" />
-                <Text fontSize="sm" fontFamily="heading" color="gray.800">
-                  Message
-                </Text>
-              </HStack>
+              <Text fontSize="sm" fontFamily="heading" color="gray.800">
+                Message
+              </Text>
             </TouchableOpacity>
-            <TouchableOpacity style={styles.moreButton}>
-              <Ionicons name="chevron-down" size={20} color="#374151" />
+            <TouchableOpacity style={styles.iconButton}>
+              <Ionicons name="person-add-outline" size={18} color="#374151" />
             </TouchableOpacity>
           </HStack>
         </Box>
 
         {/* Tabs */}
-        <HStack bg="white" shadow={1} mt={2}>
+        <HStack bg="white" borderTopWidth={1} borderTopColor="gray.100">
           <TouchableOpacity
             style={[styles.tab, selectedTab === 'posts' && styles.activeTab]}
             onPress={() => setSelectedTab('posts')}>
             <MaterialCommunityIcons
               name="grid"
               size={24}
-              color={selectedTab === 'posts' ? Colors.primary : '#9CA3AF'}
+              color={selectedTab === 'posts' ? '#374151' : '#9CA3AF'}
             />
           </TouchableOpacity>
           <TouchableOpacity
@@ -368,13 +328,13 @@ function PetProfile({navigation, route}) {
             <MaterialCommunityIcons
               name="account-box-outline"
               size={24}
-              color={selectedTab === 'tagged' ? Colors.primary : '#9CA3AF'}
+              color={selectedTab === 'tagged' ? '#374151' : '#9CA3AF'}
             />
           </TouchableOpacity>
         </HStack>
 
         {/* Posts Grid */}
-        <Box bg="white" mt={2} pb={100}>
+        <Box bg="white" pb={100}>
           <HStack flexWrap="wrap" m={0.5}>
             {samplePosts.map(post => (
               <PostGridItem key={post.id} post={post} />
@@ -406,16 +366,10 @@ function PetProfile({navigation, route}) {
 }
 
 const styles = StyleSheet.create({
-  headerButton: {
-    backgroundColor: 'rgba(0,0,0,0.3)',
-    borderRadius: 20,
-    padding: 8,
-  },
   actionButton: {
     flex: 1,
-    paddingVertical: 12,
-    paddingHorizontal: 24,
-    borderRadius: 12,
+    paddingVertical: 8,
+    borderRadius: 8,
     alignItems: 'center',
     justifyContent: 'center',
   },
@@ -423,24 +377,23 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.primary,
   },
   followingButton: {
-    backgroundColor: 'white',
-    borderWidth: 2,
-    borderColor: Colors.primary,
+    backgroundColor: '#F3F4F6',
+    borderWidth: 1,
+    borderColor: '#D1D5DB',
   },
   messageButton: {
     flex: 1,
     backgroundColor: '#F3F4F6',
-    paddingVertical: 12,
-    paddingHorizontal: 24,
-    borderRadius: 12,
+    paddingVertical: 8,
+    borderRadius: 8,
     alignItems: 'center',
     justifyContent: 'center',
   },
-  moreButton: {
+  iconButton: {
     backgroundColor: '#F3F4F6',
-    paddingVertical: 12,
-    paddingHorizontal: 16,
-    borderRadius: 12,
+    paddingVertical: 8,
+    paddingHorizontal: 12,
+    borderRadius: 8,
     alignItems: 'center',
     justifyContent: 'center',
   },
@@ -448,12 +401,12 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
-    paddingVertical: 16,
-    borderBottomWidth: 2,
+    paddingVertical: 12,
+    borderBottomWidth: 1,
     borderBottomColor: 'transparent',
   },
   activeTab: {
-    borderBottomColor: Colors.primary,
+    borderBottomColor: '#374151',
   },
   gridItem: {
     width: (screenWidth - 3) / 3,
