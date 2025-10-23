@@ -157,10 +157,16 @@ function PetProfile({navigation, route}) {
     </VStack>
   );
 
-  const PostGridItem = ({post}) => (
+  const PostGridItem = ({post, index}) => (
     <TouchableOpacity
       style={styles.gridItem}
-      onPress={() => navigation.navigate('PostDetail', {post: {...profileData, ...post, image: post.image}})}>
+      onPress={() =>
+        navigation.navigate('PostDetail', {
+          post: {...profileData, ...post, image: post.image},
+          allPosts: samplePosts.map(p => ({...profileData, ...p, image: p.image})),
+          initialIndex: index,
+        })
+      }>
       <Image
         source={{uri: post.image}}
         alt="Post"
@@ -344,8 +350,8 @@ function PetProfile({navigation, route}) {
         {/* Posts Grid */}
         <Box bg="white" pb={100}>
           <HStack flexWrap="wrap">
-            {samplePosts.map(post => (
-              <PostGridItem key={post.id} post={post} />
+            {samplePosts.map((post, index) => (
+              <PostGridItem key={post.id} post={post} index={index} />
             ))}
           </HStack>
 
