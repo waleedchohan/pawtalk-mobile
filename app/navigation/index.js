@@ -7,6 +7,7 @@ import Notifications from '../containers/notifications';
 import Messages from '../containers/messages';
 import PetProfile from '../containers/petProfile';
 import PostDetail from '../containers/postDetail';
+import StoryViewer from '../containers/storyViewer';
 
 const RootStack = createNativeStackNavigator();
 const MainStack = createNativeStackNavigator();
@@ -50,6 +51,16 @@ function MainNavigator() {
           presentation: 'card',
           animation: 'fade_from_bottom',
           animationDuration: 200,
+        }}
+      />
+      <MainStack.Screen
+        name="StoryViewer"
+        component={StoryViewer}
+        options={{
+          presentation: 'fullScreenModal',
+          animation: 'fade',
+          animationDuration: 150,
+          headerShown: false,
         }}
       />
     </MainStack.Navigator>
